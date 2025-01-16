@@ -9,18 +9,24 @@
         /* สไตล์รูปภาพซ้ายบน */
         .logo {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 10px;
+            left: 10px;
             margin: 10px;
         }
+
         /* General body styling */
         body {
             font-family: 'Arial', sans-serif;
             background: #faf8f8;
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
+        /* Back Button */
         .button-back-top-right {
             position: absolute;
             top: 20px;
@@ -30,36 +36,39 @@
             justify-content: center;
         }
 
-
         /* Main content */
         .container {
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 30px;
+            padding: 20px;
             border-radius: 15px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            max-width: 700px;
-            margin: 100px auto 20px auto;
+            max-width: 90%; /* ปรับขนาดให้เหมาะกับหน้าจอมือถือ */
+            width: 500px;
             text-align: center;
+            margin: 20px;
         }
 
         /* Section Styling */
-        h1,h2 {
+        h1, h2 {
             color: #fe1b1b;
         }
+
         #images-container {
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
             gap: 20px;
             margin: 20px 0;
+            flex-wrap: wrap; /* รองรับการจัดภาพในหน้าจอเล็ก */
         }
 
         #images-container div {
             text-align: center;
+            flex-basis: 45%; /* ทำให้แต่ละ div มีพื้นที่ที่พอเหมาะ */
         }
 
         #images-container img {
-            width: 250px;
-            height: 250px;
+            width: 200px; /* ปรับขนาดภาพให้เท่ากัน */
+            height: 200px;
             object-fit: cover;
             border-radius: 10px;
         }
@@ -68,13 +77,47 @@
             font-size: 14px;
             color: #555;
         }
+
+        /* เพิ่ม media query สำหรับอุปกรณ์ที่มีขนาดหน้าจอเล็ก */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 22px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+
+            #images-container img {
+                width: 200px; /* ลดขนาดภาพเมื่อหน้าจอเล็กลง */
+                height: 200px;
+            }
+
+            .container {
+                padding: 15px;
+                width: 90%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo img {
+                width: 120px;
+                height: auto;
+            }
+
+            .button-back-top-right img {
+                width: 40px;
+                height: 35px;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <a class="xx"></a>
+    <a class="logo">
         <img src="03.png" alt="ป้าย" style="width: 150px; height: 70px;">
     </a>
+
     <!-- Back Button -->
     <a href="page4.html" class="button-back-top-right">
         <img src="2.png" alt="ย้อนกลับ" style="width: 50px; height: 40px;">
@@ -97,10 +140,10 @@
                 <img id="rightEyeImage" alt="ไม่พบตาขวา">
             </div>
         </div>
+
         <p><strong>จากผลการตรวจวิเคราะห์</strong></p>
         <p>พบว่าค่าความสมบูรณ์ ของเม็ดเลือดของท่านอยู่ในเกณฑ์ต่ำกว่ามาตราฐาน </p>
         <p>คำแนะนำ: ควรรีบพบเเพทย์ผู้เชี่ยวชาญเพื่อทำการตรวจอย่างละเอียด</p>
-
 
         <!-- Load images from localStorage -->
         <script>
