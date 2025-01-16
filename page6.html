@@ -6,41 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ผลการตรวจเลือด</title>
     <style>
-        /* สไตล์ของ body */
+        /* สไตล์รูปภาพซ้ายบน */
+        .logo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 10px;
+        }
+
+        /* General body styling */
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(180deg, rgba(170, 163, 185, 0.7), rgba(118, 115, 115, 0.9)), url('3.jpg');
+            background: #faf8f8;
             text-align: center;
-            padding: 20px;
             margin: 0;
+            padding: 0;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-size: cover;
-            background-position: center;
+            flex-direction: column;
         }
-
-        .button-back-top-right {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: #f44336;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 14px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease;
-        }
-
-        .button-back-top-right:hover {
-            background-color: #e53935;
-        }
-
 
         .container {
             background-color: rgba(255, 255, 255, 0.9);
@@ -48,37 +34,94 @@
             border-radius: 15px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             text-align: center;
-            max-width: 400px;
+            max-width: 500px;
             width: 100%;
         }
 
-        h1 {
+        h1,h2 {
             color: #388e3c;
         }
 
-        img {
-            max-width: 300px;
-            margin: 20px auto;
+        /* Back button */
+        .button-back-top-right {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        /* Style for images container */
+        #images-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        /* Style for consistent image sizes */
+        #images-container img {
+            width: 200px;
+            /* ขนาดที่เท่าเทียม */
+            height: 200px;
+            /* ขนาดที่เท่าเทียม */
+            object-fit: cover;
             border-radius: 10px;
+        }
+
+        #images-container h2 {
+            font-size: 16px;
+            color: #555;
         }
     </style>
 </head>
 
 <body>
+    <a class="logo">
+    <img src="03.png" alt="ป้าย" style="width: 150px; height: 70px;">
+    </a>
     <div class="container">
-        <a href="page4.html" class="button-back-top-right">ย้อนกลับ</a>
-        <h1>ผลการตรวจเลือด</h1>
-        <p>ไม่พบความเสี่ยง</p>
+        <a href="page4.html" class="button-back-top-right">
+            <img src="2.png" alt="ย้อนกลับ" style="width: 50px; height: 40px;">
+        </a>
+        <h1>วิเคราะห์ผลเลือดเสร็จสมบูรณ์</h1>
+        <h2>ท่านไม่มีความเสี่ยงต่อภาวะโลหิตจาง</h2>
 
-        <h2>ภาพที่ถ่าย</h2>
-        <img id="capturedImage" alt="Captured Image" />
+        <div id="images-container">
+            <!-- Image สำหรับตาซ้าย -->
+            <div>
+                <h2>ตาซ้าย</h2>
+                <img id="leftEyeImage" alt="ไม่พบตาซ้าย">
+            </div>
+            <!-- Image สำหรับตาขวา -->
+            <div>
+                <h2>ตาขวา</h2>
+                <img id="rightEyeImage" alt="ไม่พบตาขวา">
+            </div>
+        </div>
+        <p><strong>จากผลการตรวจวิเคราะห์</strong></p>
+        <p>พบว่าค่าความสมบูรณ์ ของเม็ดเลือดของท่านอยู่ในเกณฑ์มาตราฐาน </p>
+       
         <script>
-            // Retrieve the image data from local storage
-            const imageData = localStorage.getItem('capturedImage');
-            if (imageData) {
-                document.getElementById('capturedImage').src = imageData;
+            // ดึงภาพจาก localStorage
+            const rightImageData = localStorage.getItem('rightEyeImage');
+            const leftImageData = localStorage.getItem('leftEyeImage');
+
+            // ตรวจสอบ และแสดงภาพตาขวา
+            if (rightImageData) {
+                document.getElementById('rightEyeImage').src = rightImageData;
             } else {
-                document.getElementById('capturedImage').alt = "ไม่พบภาพที่ถ่าย";
+                document.getElementById('rightEyeImage').alt = "ไม่พบภาพตาขวา";
+            }
+
+            // ตรวจสอบ และแสดงภาพตาซ้าย
+            if (leftImageData) {
+                document.getElementById('leftEyeImage').src = leftImageData;
+            } else {
+                document.getElementById('leftEyeImage').alt = "ไม่พบภาพตาซ้าย";
             }
         </script>
     </div>
