@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เริ่มการถ่ายภาพและตรวจจับตำแหน่งดวงตา</title>
+    <style>
+        /* สไตล์ของ body */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(180deg, rgba(170, 163, 185, 0.7), rgba(118, 115, 115, 0.9)), url('3.jpg');
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .confirmation {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .confirmation:hover {
+            background-color: #e53935;
+        }
+
+        .container {
+            background-color: rgba(254, 250, 250, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(240, 234, 234, 0.2);
+            text-align: center;
+            max-width: 500px;
+            min-height: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 26px;
+            color: #4A3F90;
+            margin-bottom: 20px;
+        }
+
+        video {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(233, 228, 228, 0.2);
+            margin-top: 20px;
+            transform: scaleX(-1);
+        }
+
+        .circle {
+            width: 100px;
+            height: 100px;
+            border: 4px solid red;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        .capture-button {
+            width: 100px;
+            height: 100px;
+            background-color: #F58220;
+            border: none;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        .capture-button:hover {
+            background-color: #f2af13;
+            transform: translateX(-50%) scale(1.1);
+        }
+
+        canvas {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="page2-1.html" class="confirmation">ย้อนกลับ</a>
+    <div class="container">
+        <h1>เริ่มการถ่ายภาพ</h1>
+        <video id="video" autoplay></video>
+        <div class="circle" id="eye-circle"></div>
+        <button class="capture-button" id="capture">ถ่ายภาพ</button>
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureButton = document.getElementById('capture');
+        const eyeCircle = document.getElementById('eye-circle');
+
+        // เริ่มต้นการทำงานกล้อง
+        function startCamera() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                })
+                .catch(err => {
+                    console.error("Camera error:", err);
+                    alert("ไม่สามารถเข้าถึงกล้องได้");
+                });
+        }
+
+        // การตรวจจับดวงตาจำลอง
+        function detectEye() {
+            const eyeDetected = Math.random() > 0.7; // จำลองโอกาสการตรวจจับ
+            eyeCircle.style.borderColor = eyeDetected ? 'green' : 'red';
+        }
+
+        // ถ่ายภาพ
+        captureButton.addEventListener('click', () => {
+            if (eyeCircle.style.borderColor === 'green') {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const context = canvas.getContext('2d');
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageData = canvas.toDataURL('image/png');
+                localStorage.setItem('capturedImage', imageData);
+
+                alert("ตำแหน่งดวงตาถูกยืนยันแล้ว! กำลังเปลี่ยนหน้า...");
+                window.location.href = 'page5.html';
+            } else {
+                alert("ไม่พบตำแหน่งดวงตา! กรุณาลองใหม่.");
+            }
+        });
+
+        // เริ่มต้นการตรวจจับดวงตาและการใช้งานกล้อง
+        setInterval(detectEye, 1000);
+        startCamera();
+    </script>
+</body>
+
+</html>
