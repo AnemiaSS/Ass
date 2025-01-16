@@ -4,51 +4,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ยินดีต้อนรับ</title>
+    <title>คำแนะนำการใช้งาน</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* สไตล์พื้นฐาน */
+        /* สไตล์รูปภาพซ้ายบน */
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        /* สไตล์ของ body */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Prompt', 'Sarabun', sans-serif;
             background: #faf8f8;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             flex-direction: column;
+            min-height: 100vh;
         }
 
+        /* สไตล์ของ container */
         .container {
             background-color: rgba(255, 255, 255, 0.9);
             padding: 20px;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            max-width: 90%;
-            width: 350px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             text-align: center;
+            max-width: 500px;
+            width: 90%;
+            margin: 10px;
         }
 
-        h1 {
-            font-family: 'Prompt', 'Sarabun', sans-serif;
+        /* สไตล์ของ h2 */
+        h2 {
             font-weight: bold;
-            color: #5A3D9A;
-            font-size: 24px;
-            line-height: 1.5;
-            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 1.5rem;
+            color: #7c5ba6;
+            margin-bottom: 15px;
         }
 
+        /* สไตล์ของปุ่ม */
         .button {
             display: block;
             width: 100%;
+            max-width: 300px;
             margin: 10px auto;
-            padding: 10px;
-            font-size: 16px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
             color: #FFFFFF;
             background-color: #f5b62a;
             border: none;
-            border-radius: 20px;
-            transition: background-color 0.3s ease;
+            border-radius: 25px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
             cursor: pointer;
         }
 
@@ -56,54 +70,79 @@
             background-color: #f07325;
         }
 
-        
-
-        .purple-bar {
-            width: 100%;
-            height: 60px;
-            background-color: #5A3D9A;
-            position: fixed;
-            left: 0;
-            z-index: 10;
+        .button:active {
+            background-color: #f5b62a;
+            transform: translateY(3px);
         }
 
-        .purple-bar.top {
-            top: 0;
+        /* รูปแบบของรายการ ul */
+        ul {
+            text-align: left;
+            margin: 15px 0;
+            padding-left: 20px;
         }
 
-        .purple-bar.bottom {
-            bottom: 0;
+        ul li {
+            margin: 10px 0;
+            font-size: 1rem;
+            color: #555555;
         }
 
-        /* ปรับสไตล์สำหรับหน้าจอขนาดเล็ก */
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 18px;
-            }
-
-            .button {
-                font-size: 14px;
-                padding: 8px;
-            }
-
+        /* ปรับขนาดฟอนต์และส่วนต่างๆสำหรับหน้าจอขนาดเล็ก */
+        @media (max-width: 768px) {
             .container {
                 padding: 15px;
             }
+
+            h2 {
+                font-size: 1.25rem;
+            }
+
+            ul li {
+                font-size: 0.9rem;
+            }
+
+            .button {
+                font-size: 0.9rem;
+                padding: 10px 15px;
+            }
+
         }
     </style>
 </head>
 
 <body>
-    <div class="purple-bar top"></div>
-    <img src="03.png" alt="ป้าย" style="width:400px;"; height="175px;" />
-    <div class="container">
-        <h1>ยินดีต้อนรับสู่ระบบการตรวจ<br>คัดกรองโรคโลหิตจาง</h1>
-        <div class="options">
-            <button class="button" onclick="window.location.href='page2.html'">ลงทะเบียน</button>
-            <button class="button" onclick="window.location.href='page3.html'">เข้าสู่ระบบ</button>
-        </div>
+    <div class="logo">
+        <img src="03.png" alt="ป้าย" style="width: 150px; height: auto;">
     </div>
-    <div class="purple-bar bottom"></div>
+
+    <div class="container" id="confirmation-screen">
+        <h2>คำแนะนำการใช้งาน</h2>
+        <div class="confirmation">
+            <ul>
+                <li><strong>1. เตรียมตัว</strong><br>
+                    - ใช้ถุงใต้ตาเป็นจุดสังเกต<br>
+                    - ควรใช้แสงสว่างเพียงพอ<br>
+                    - ทำความสะอาดรอบดวงตา<br>
+                    - ตรวจสอบให้ไม่มีสิ่งใดบังถุงใต้ตา
+                </li>
+                <li><strong>2. เมื่อเข้าสู่หน้าถ่ายรูป</strong><br>
+                    - ดึงเปลือกตาขวาลง<br>
+                    - เลื่อนตาและถุงใต้ตาให้อยู่ในวงกลม<br>
+                    - หากตาอยู่ในกรอบวงกลม วงกลมจะเปลี่ยนเป็นสีเขียว<br>
+                    - กดถ่ายรูปเมื่อมั่นใจในตำแหน่ง
+                </li>
+            </ul>
+        </div>
+        <button class="button" onclick="startShooting()">เริ่มการถ่ายภาพ</button>
+    </div>
+
+    <script>
+        function startShooting() {
+
+            window.location.href = 'page4.html';
+        }
+    </script>
 </body>
 
 </html>
