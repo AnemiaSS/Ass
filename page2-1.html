@@ -8,21 +8,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&family=Sarabun:wght@400;700&display=swap"
         rel="stylesheet">
     <style>
+        /* สไตล์รูปภาพซ้ายบน */
+        .logo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 10px;
+        }
+
         /* สไตล์ของ body */
         body {
             font-family: 'Prompt', 'Sarabun', sans-serif;
-            background: linear-gradient(180deg, rgba(170, 163, 185, 0.7), rgba(118, 115, 115, 0.9)), url('3.jpg');
+            background: #faf8f8;
             text-align: center;
-            padding: 20px;
             margin: 0;
+            padding: 0;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-size: cover;
-            background-position: center;
+            flex-direction: column;
         }
 
         /* สไตล์ของ container */
@@ -42,7 +47,7 @@
             font-weight: bold;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
             font-size: 24px;
-            color: #5A3D9A;
+            color: #7c5ba6;
             margin-bottom: 20px;
         }
 
@@ -57,19 +62,19 @@
             font-weight: bold;
             text-align: center;
             color: #FFFFFF;
-            background-color: #F58220;
+            background-color: #f5b62a;
             border: none;
             border-radius: 25px;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease;
             cursor: pointer;
         }
 
         .button:hover {
-            background-color: #f2af13;
+            background-color: #f07325;
         }
 
         .button:active {
-            background-color: #f2af13;
+            background-color: #f5b62a;
             transform: translateY(3px);
         }
 
@@ -77,69 +82,56 @@
         ul {
             text-align: left;
             margin: 20px 0;
-            padding: 0;
-            list-style-type: none;
+            padding-left: 20px;
         }
 
         ul li {
-            margin: 10px 0;
+            margin: 15px 0;
             font-size: 16px;
             color: #555555;
         }
+        
+        
     </style>
 </head>
 
-<div class="container" id="confirmation-screen">
-    <h2>คำแนะนำการใช้งาน</h2>
-    <div class="confirmation">
-        <ul>
-            <li><strong>1. เตรียมตัว</strong></li>
-            - ใช้ถุงใต้ตาเป็นจุดสังเกต<br>
-            - ควรใช้แสงสว่างเพียงพอ<br>
-            - ทำความสะอาดรอบดวงตา<br>
-            - ตรวจสอบให้ไม่มีสิ่งใดบังถุงใต้ตา</p>
-            <li><strong>2. เมื่อเข้าสู่หน้าถ่ายรูป</strong></li>
-            - ดึงเปลือกตาขวาลง<br>
-            - เลื่อนตาและถุงใต้ตาให้อยู่ในวงกลม<br>
-            - หากตาอยู่ในกรอบวงกลม วงกลมจะเปลี่ยนเป็นสีเขียว<br>
-            - กดถ่ายรูปเมื่อมั่นใจในตำแหน่ง</p>
-        </ul>
+<body>
+    <div class="purple-bar top"></div>
+    <!-- รูปภาพซ้ายบน -->
+    <div class="logo">
+        <img src="03.png" alt="ป้าย" style="width: 150px; height: 70px;">
     </div>
-    <button class="button" onclick="startShooting()">เริ่มการถ่ายภาพ</button>
-</div>
-<script>
-    function startShooting() {
-        alert("คุณกำลังเข้าสู่หน้าถ่ายภาพ...");
-        window.location.href = 'page4.html';
-    }
-</script>
-<script>
-    function proceed() {
-        const checkbox = document.getElementById('conditions-check');
-        if (!checkbox.checked) {
-            alert('กรุณายอมรับเงื่อนไขก่อนดำเนินการต่อ');
-            return;
+
+    <!-- คอนเทนเนอร์เนื้อหา -->
+    <div class="container" id="confirmation-screen">
+        <h2>คำแนะนำการใช้งาน</h2>
+        <div class="confirmation">
+            <ul>
+                <li><strong>1. เตรียมตัว</strong><br>
+                    - ใช้ถุงใต้ตาเป็นจุดสังเกต<br>
+                    - ควรใช้แสงสว่างเพียงพอ<br>
+                    - ทำความสะอาดรอบดวงตา<br>
+                    - ตรวจสอบให้ไม่มีสิ่งใดบังถุงใต้ตา
+                </li>
+                <li><strong>2. เมื่อเข้าสู่หน้าถ่ายรูป</strong><br>
+                    - ดึงเปลือกตาขวาลง<br>
+                    - เลื่อนตาและถุงใต้ตาให้อยู่ในวงกลม<br>
+                    - หากตาอยู่ในกรอบวงกลม วงกลมจะเปลี่ยนเป็นสีเขียว<br>
+                    - กดถ่ายรูปเมื่อมั่นใจในตำแหน่ง
+                </li>
+            </ul>
+        </div>
+        <button class="button" onclick="startShooting()">เริ่มการถ่ายภาพ</button>
+        <div class="purple-bar top"></div>
+    </div>
+
+    <!-- ฟังก์ชันสคริปต์ -->
+    <script>
+        function startShooting() {
+            alert("คุณกำลังเข้าสู่หน้าถ่ายภาพ...");
+            window.location.href = 'page4.html';
         }
-        switchScreen('conditions-screen', 'register-screen');
-    }
-
-    document.getElementById('register-form').addEventListener('submit', function (e) {
-        e.preventDefault();
-        switchScreen('register-screen', 'confirmation-screen');
-    });
-
-    function switchScreen(hideId, showId) {
-        document.getElementById(hideId).classList.remove('active');
-        document.getElementById(hideId).style.display = 'none';
-        document.getElementById(showId).classList.add('active');
-        document.getElementById(showId).style.display = 'block';
-    }
-
-    function startShooting() {
-        alert("คุณกำลังเข้าสู่หน้าถ่ายภาพ...");
-        window.location.href = 'page4.html';
-    }
-</script>
+    </script>
 </body>
 
 </html>
