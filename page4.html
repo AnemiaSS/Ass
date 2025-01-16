@@ -1,182 +1,307 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เริ่มการถ่ายภาพและตรวจจับตำแหน่งดวงตา</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eye Detection with Camera Controls</title>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
     <style>
-        /* สไตล์ของ body */
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(180deg, rgba(170, 163, 185, 0.7), rgba(118, 115, 115, 0.9)), url('3.jpg');
+            background: #faf8f8;
             text-align: center;
-            padding: 20px;
             margin: 0;
+            padding: 0;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-size: cover;
-            background-position: center;
+            flex-direction: column;
         }
 
-        .confirmation {
+        .button-back-top-right {
             position: absolute;
             top: 20px;
             right: 20px;
-            background-color: #f44336;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 14px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .confirmation:hover {
-            background-color: #e53935;
+        .button-back-top-right img {
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .button-back-top-right img:hover {
+            transform: scale(1.1);
         }
 
         .container {
-            background-color: rgba(254, 250, 250, 0.9);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 8px 16px rgba(240, 234, 234, 0.2);
-            text-align: center;
-            max-width: 500px;
-            min-height: 600px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             width: 100%;
+            max-width: 720px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         h1 {
-            font-size: 26px;
-            color: #4A3F90;
-            margin-bottom: 20px;
+            font-size: 24px;
+            color: #7c5ba6;
+            margin-bottom: 15px;
         }
 
-        video {
-            max-width: 100%;
+        .main-canvas {
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(233, 228, 228, 0.2);
-            margin-top: 20px;
-            transform: scaleX(-1);
+            max-width: 100%;
+            max-height: 400px;
+            box-shadow: 0 2px 4px #7c5ba6(0, 0, 0, 0.2);
+            margin: 15px 0;
         }
 
-        .circle {
-            width: 100px;
-            height: 100px;
-            border: 4px solid red;
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.2);
-            }
-        }
-
-        .capture-button {
-            width: 100px;
-            height: 100px;
-            background-color: #F58220;
-            border: none;
-            border-radius: 50%;
-            position: absolute;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
+        .controls {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 16px;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .btn-action {
+            background-color: #f5b62a;
             color: white;
-            font-weight: bold;
-            text-transform: uppercase;
-            transition: transform 0.2s, background-color 0.3s;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        .capture-button:hover {
-            background-color: #f2af13;
-            transform: translateX(-50%) scale(1.1);
+        .btn-action:hover {
+            background-color: #f07325;
         }
 
-        canvas {
-            display: none;
+        .xx {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 10px;
+        }
+
+        .camera-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .camera-btn {
+            background-color: #f5b62a;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .camera-btn:hover {
+            background-color: #f07325;
         }
     </style>
 </head>
 
 <body>
-    <a href="page2-1.html" class="confirmation">ย้อนกลับ</a>
+    <a class="xx">
+        <img src="03.png" alt="ป้าย" style="width: 150px; height: 70px;">
+    </a>
+    
+    <a href="page4.html" class="button-back-top-right">
+        <img src="2.png" alt="ย้อนกลับ" style="width: 50px; height: 40px;">
+    </a>
+
     <div class="container">
-        <h1>เริ่มการถ่ายภาพ</h1>
-        <video id="video" autoplay></video>
-        <div class="circle" id="eye-circle"></div>
-        <button class="capture-button" id="capture">ถ่ายภาพ</button>
-        <canvas id="canvas"></canvas>
+        <h1>ถ่ายภาพเพื่อวิเคราะห์</h1>
+        <div class="camera-controls">
+            <button id="flipCamera" class="camera-btn">สลับกล้อง</button>
+            <button id="rotateCamera" class="camera-btn">หมุนกล้อง</button>
+        </div>
+        <video id="video" autoplay muted style="display:none;"></video>
+        <canvas id="outputCanvas" class="main-canvas"></canvas>
+        <button id="captureButton" class="btn-action">
+            <img src="04.png" alt="ถ่ายภาพ" style="width: 40px; height: 30px;">
+        </button>
     </div>
 
     <script>
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const captureButton = document.getElementById('capture');
-        const eyeCircle = document.getElementById('eye-circle');
+        const videoElement = document.getElementById('video');
+        const canvasElement = document.getElementById('outputCanvas');
+        const canvasCtx = canvasElement.getContext('2d');
+        let faceMesh;
+        let currentLandmarks = null;
+        let currentCamera = 'user';
+        let rotation = 0;
+        let camera;
 
-        // เริ่มต้นการทำงานกล้อง
-        function startCamera() {
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then(stream => {
-                    video.srcObject = stream;
-                })
-                .catch(err => {
-                    console.error("Camera error:", err);
-                    alert("ไม่สามารถเข้าถึงกล้องได้");
-                });
+        async function initializeFaceMesh() {
+            faceMesh = new FaceMesh({
+                locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`,
+            });
+
+            faceMesh.setOptions({
+                maxNumFaces: 1,
+                refineLandmarks: true,
+                minDetectionConfidence: 0.5,
+                minTrackingConfidence: 0.5,
+            });
+
+            faceMesh.onResults(onResults);
         }
 
-        // การตรวจจับดวงตาจำลอง
-        function detectEye() {
-            const eyeDetected = Math.random() > 0.7; // จำลองโอกาสการตรวจจับ
-            eyeCircle.style.borderColor = eyeDetected ? 'green' : 'red';
+        async function startCamera() {
+            if (camera) {
+                await camera.stop();
+            }
+
+            camera = new Camera(videoElement, {
+                onFrame: async () => {
+                    await faceMesh.send({ image: videoElement });
+                },
+                width: 640,
+                height: 480,
+                facingMode: currentCamera
+            });
+
+            try {
+                await camera.start();
+            } catch (error) {
+                console.error('Error starting camera:', error);
+                alert('ไม่สามารถเปิดกล้องได้ กรุณาตรวจสอบการอนุญาตการใช้กล้อง');
+            }
         }
 
-        // ถ่ายภาพ
-        captureButton.addEventListener('click', () => {
-            if (eyeCircle.style.borderColor === 'green') {
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                const context = canvas.getContext('2d');
-                context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                const imageData = canvas.toDataURL('image/png');
-                localStorage.setItem('capturedImage', imageData);
+        function onResults(results) {
+            canvasElement.width = videoElement.videoWidth;
+            canvasElement.height = videoElement.videoHeight;
 
-                alert("ตำแหน่งดวงตาถูกยืนยันแล้ว! กำลังเปลี่ยนหน้า...");
-                window.location.href = 'page5.html';
+            canvasCtx.save();
+            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+            
+            // Apply rotation
+            canvasCtx.translate(canvasElement.width/2, canvasElement.height/2);
+            canvasCtx.rotate(rotation * Math.PI / 180);
+            canvasCtx.translate(-canvasElement.width/2, -canvasElement.height/2);
+            
+            canvasCtx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+
+            if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
+                currentLandmarks = results.multiFaceLandmarks[0];
+            }
+
+            canvasCtx.restore();
+        }
+
+        function captureEyeRegion(landmarks, indices, scaleFactor) {
+            const xCoords = indices.map((idx) => landmarks[idx].x * canvasElement.width);
+            const yCoords = indices.map((idx) => landmarks[idx].y * canvasElement.height);
+
+            const xMin = Math.min(...xCoords);
+            const xMax = Math.max(...xCoords);
+            const yMin = Math.min(...yCoords);
+            const yMax = Math.max(...yCoords);
+
+            const width = xMax - xMin;
+            const height = yMax - yMin;
+            const size = Math.max(width, height) * scaleFactor;
+
+            const centerX = (xMin + xMax) / 2;
+            const centerY = (yMin + yMax) / 2;
+
+            return { x: centerX - size / 2, y: centerY - size / 2, size: size };
+        }
+
+        function storeCapturedImages(leftRegion, rightRegion) {
+            const leftCanvas = document.createElement('canvas');
+            const rightCanvas = document.createElement('canvas');
+            leftCanvas.width = rightCanvas.width = leftRegion.size;
+            leftCanvas.height = rightCanvas.height = rightRegion.size;
+
+            const leftCtx = leftCanvas.getContext('2d');
+            const rightCtx = rightCanvas.getContext('2d');
+
+            // Apply the same rotation to captured images
+            leftCtx.translate(leftCanvas.width/2, leftCanvas.height/2);
+            leftCtx.rotate(rotation * Math.PI / 180);
+            leftCtx.translate(-leftCanvas.width/2, -leftCanvas.height/2);
+
+            rightCtx.translate(rightCanvas.width/2, rightCanvas.height/2);
+            rightCtx.rotate(rotation * Math.PI / 180);
+            rightCtx.translate(-rightCanvas.width/2, -rightCanvas.height/2);
+
+            leftCtx.drawImage(
+                canvasElement,
+                leftRegion.x,
+                leftRegion.y,
+                leftRegion.size,
+                leftRegion.size,
+                0,
+                0,
+                leftRegion.size,
+                leftRegion.size
+            );
+
+            rightCtx.drawImage(
+                canvasElement,
+                rightRegion.x,
+                rightRegion.y,
+                rightRegion.size,
+                rightRegion.size,
+                0,
+                0,
+                rightRegion.size,
+                rightRegion.size
+            );
+
+            localStorage.setItem('leftEyeImage', leftCanvas.toDataURL('image/png'));
+            localStorage.setItem('rightEyeImage', rightCanvas.toDataURL('image/png'));
+
+            window.location.href = "page5.html";
+        }
+
+        document.getElementById('flipCamera').addEventListener('click', async () => {
+            currentCamera = currentCamera === 'user' ? 'environment' : 'user';
+            await startCamera();
+        });
+
+        document.getElementById('rotateCamera').addEventListener('click', () => {
+            rotation = (rotation + 90) % 360;
+        });
+
+        document.getElementById('captureButton').addEventListener('click', () => {
+            if (currentLandmarks) {
+                const leftRegion = captureEyeRegion(currentLandmarks, [33, 133, 159, 145, 158, 144], 1.8);
+                const rightRegion = captureEyeRegion(currentLandmarks, [362, 263, 386, 374, 385, 373], 1.8);
+                storeCapturedImages(leftRegion, rightRegion);
             } else {
-                alert("ไม่พบตำแหน่งดวงตา! กรุณาลองใหม่.");
+                alert('ไม่พบตำแหน่งดวงตา! กรุณาให้กล้องทำงานอีกครั้ง.');
             }
         });
 
-        // เริ่มต้นการตรวจจับดวงตาและการใช้งานกล้อง
-        setInterval(detectEye, 1000);
-        startCamera();
+        async function initialize() {
+            await initializeFaceMesh();
+            await startCamera();
+        }
+
+        initialize();
     </script>
 </body>
-
 </html>
