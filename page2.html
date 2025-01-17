@@ -4,35 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบลงทะเบียน</title>
+    <title>การลงทะเบียน</title>
     <style>
+        /* สไตล์ของ logo */
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        .logo img {
+            max-width: 150px;
+            height: auto;
+        }
+
+        /* สไตล์ของ body */
         body {
             font-family: 'Arial', sans-serif;
             background: #faf8f8;
             margin: 0;
             padding: 0;
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
-        }
-
-        .logo {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-        }
-
-        .container {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             text-align: center;
-            max-width: 500px;
+        }
+
+        /* สไตล์ของ container */
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            max-width: 350px;
             width: 90%;
-            margin: 20px auto;
             display: none;
         }
 
@@ -41,80 +47,81 @@
         }
 
         h1, h2 {
-            font-family: 'Prompt', 'Sarabun', sans-serif;
-            font-weight: bold;
             color: #7c5ba6;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         ul {
-            text-align: left;
-            margin: 20px 0;
-            padding: 0;
             list-style-type: none;
+            padding: 0;
+            text-align: left;
         }
 
         ul li {
             margin: 10px 0;
             font-size: 16px;
-            color: #555;
+            color: #333;
         }
 
         label {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
             font-size: 16px;
             color: #5A3D9A;
             font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 10px 0;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
         }
 
         input[type="text"],
         input[type="tel"],
         input[type="date"] {
             width: 100%;
-            padding: 14px;
+            padding: 10px;
             margin: 10px 0;
-            border: 2px solid #7c5ba6;
+            border: 1px solid #7c5ba6;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 14px;
             box-sizing: border-box;
         }
 
         input:focus {
             border-color: #f5b62a;
-            outline: none;
             box-shadow: 0 0 5px rgba(245, 130, 32, 0.7);
+            outline: none;
         }
 
         .button {
             width: 100%;
-            max-width: 300px;
-            margin: 10px auto;
-            padding: 12px 20px;
-            font-size: 16px;
-            font-weight: bold;
-            text-align: center;
-            color: #fff;
+            padding: 10px;
+            margin-top: 10px;
             background-color: #f5b62a;
+            color: #fff;
             border: none;
             border-radius: 25px;
-            transition: background-color 0.3s, transform 0.2s;
+            font-size: 16px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         .button:hover {
             background-color: #f07325;
         }
+
+        .button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
 <body>
-    <!-- รูปภาพโลโก้ -->
+    <!-- Logo -->
     <div class="logo">
-        <img src="03.png" alt="ป้าย" style="width: 150px; height: auto;">
+        <img src="03.png" alt="Logo">
     </div>
 
     <!-- หน้าจอข้อกำหนด -->
@@ -126,8 +133,11 @@
             <li>ไม่เคยเสียเลือดมากหรือได้รับเลือดใน 1 เดือนที่ผ่านมา</li>
             <li>ไม่มีประวัติฉายแสงหรือเคมีบำบัด</li>
         </ul>
-        <label><input type="checkbox" id="conditions-check"> ข้าพเจ้ามีคุณสมบัติตรงตามข้อกำหนด</label>
-        <button class="button" onclick="proceedToRegister()">ลงทะเบียน</button>
+        <label>
+            <input type="checkbox" id="conditions-check">
+            ข้าพเจ้ามีคุณสมบัติตรงตามข้อกำหนด
+        </label>
+        <button class="button" id="proceed-button" disabled>ลงทะเบียน</button>
     </div>
 
     <!-- หน้าจอลงทะเบียน -->
@@ -136,14 +146,16 @@
         <form id="register-form">
             <label for="name">ชื่อ</label>
             <input type="text" id="name" placeholder="กรอกชื่อ" required>
+
             <label for="surname">นามสกุล</label>
             <input type="text" id="surname" placeholder="กรอกนามสกุล" required>
-            <label for="nationality">สัญชาติ</label>
-            <input type="text" id="nationality" placeholder="กรอกสัญชาติ" required>
+
             <label for="phone">เบอร์โทรศัพท์</label>
             <input type="tel" id="phone" placeholder="กรอกเบอร์โทรศัพท์" required>
+
             <label for="dob">วันเดือนปีเกิด</label>
             <input type="date" id="dob" required>
+
             <button type="submit" class="button">ยืนยันการลงทะเบียน</button>
         </form>
     </div>
@@ -156,27 +168,31 @@
     </div>
 
     <script>
-        function proceedToRegister() {
-            const checkbox = document.getElementById('conditions-check');
-            if (!checkbox.checked) {
-                alert('กรุณายอมรับเงื่อนไขก่อนดำเนินการต่อ');
-                return;
-            }
-            switchScreen('conditions-screen', 'register-screen');
+        // ฟังก์ชันตรวจสอบเงื่อนไข
+        const checkbox = document.getElementById('conditions-check');
+        const proceedButton = document.getElementById('proceed-button');
+        checkbox.addEventListener('change', () => {
+            proceedButton.disabled = !checkbox.checked;
+        });
+
+        // ฟังก์ชันเปลี่ยนหน้าจอ
+        function switchScreen(hideId, showId) {
+            document.getElementById(hideId).classList.remove('active');
+            document.getElementById(showId).classList.add('active');
         }
 
+        // การยืนยันเงื่อนไข
+        proceedButton.addEventListener('click', () => {
+            switchScreen('conditions-screen', 'register-screen');
+        });
+
+        // การส่งฟอร์ม
         document.getElementById('register-form').addEventListener('submit', function (e) {
             e.preventDefault();
             switchScreen('register-screen', 'confirmation-screen');
         });
 
-        function switchScreen(hideId, showId) {
-            document.getElementById(hideId).classList.remove('active');
-            document.getElementById(hideId).style.display = 'none';
-            document.getElementById(showId).classList.add('active');
-            document.getElementById(showId).style.display = 'block';
-        }
-
+        // เริ่มต้นใช้งาน
         function startShooting() {
             window.location.href = 'page2-1.html';
         }
@@ -184,4 +200,3 @@
 </body>
 
 </html>
-
