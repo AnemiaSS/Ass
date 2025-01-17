@@ -5,47 +5,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>คำแนะนำการใช้งาน</title>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&family=Sarabun:wght@400;700&display=swap"
+        rel="stylesheet">
     <style>
         /* สไตล์รูปภาพซ้ายบน */
         .logo {
             position: absolute;
-            top: 10px;
-            left: 10px;
+            top: 0;
+            left: 0;
+            margin: 10px;
         }
 
         /* สไตล์ของ body */
         body {
             font-family: 'Prompt', 'Sarabun', sans-serif;
             background: #faf8f8;
+            text-align: center;
             margin: 0;
             padding: 0;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            min-height: 100vh;
         }
 
         /* สไตล์ของ container */
         .container {
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            padding: 30px 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             text-align: center;
             max-width: 500px;
             width: 90%;
-            margin: 10px;
+            margin: 20px;
         }
 
         /* สไตล์ของ h2 */
         h2 {
             font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-            font-size: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-size: 24px;
             color: #7c5ba6;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         /* สไตล์ของปุ่ม */
@@ -55,7 +58,7 @@
             max-width: 300px;
             margin: 10px auto;
             padding: 12px 20px;
-            font-size: 1rem;
+            font-size: 16px;
             font-weight: bold;
             text-align: center;
             color: #FFFFFF;
@@ -78,67 +81,54 @@
         /* รูปแบบของรายการ ul */
         ul {
             text-align: left;
-            margin: 15px 0;
+            margin: 20px 0;
             padding-left: 20px;
         }
 
         ul li {
-            margin: 10px 0;
-            font-size: 1rem;
+            margin: 15px 0;
+            font-size: 16px;
             color: #555555;
         }
-
-        /* ปรับขนาดฟอนต์และส่วนต่างๆสำหรับหน้าจอขนาดเล็ก */
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-
-            h2 {
-                font-size: 1.25rem;
-            }
-
-            ul li {
-                font-size: 0.9rem;
-            }
-
-            .button {
-                font-size: 0.9rem;
-                padding: 10px 15px;
-            }
-
-        }
+        
+        
     </style>
 </head>
 
 <body>
+    <div class="purple-bar top"></div>
+    <!-- รูปภาพซ้ายบน -->
     <div class="logo">
-        <img src="03.png" alt="ป้าย" style="width: 150px; height: auto;">
+        <img src="03.png" alt="ป้าย" style="width: 150px; height: 70px;">
     </div>
 
+    <!-- คอนเทนเนอร์เนื้อหา -->
     <div class="container" id="confirmation-screen">
         <h2>คำแนะนำการใช้งาน</h2>
         <div class="confirmation">
             <ul>
-                <li><strong>1. เตรียมตัว</strong><br>
-                    - ใช้ถุงใต้ตาเป็นจุดสังเกต<br>
-                    - ควรใช้แสงสว่างเพียงพอ<br>
-                    - ทำความสะอาดรอบดวงตา<br>
-                    - ตรวจสอบให้ไม่มีสิ่งใดบังถุงใต้ตา
-                </li>
-                <li><strong>2. เมื่อเข้าสู่หน้าถ่ายรูป</strong><br>
-                    - ดึงเปลือกตาขวาลง<br>
-                    - เลื่อนตาและถุงใต้ตาให้อยู่ในวงกลม<br>
-                    - หากตาอยู่ในกรอบวงกลม วงกลมจะเปลี่ยนเป็นสีเขียว<br>
-                    - กดถ่ายรูปเมื่อมั่นใจในตำแหน่ง
+                <strong>1. เตรียมตัว</strong><br>
+                     ใช้ถุงใต้ตาเป็นจุดสังเกต<br>
+                    ควรใช้แสงสว่างเพียงพอ<br>
+                    ทำความสะอาดรอบดวงตา<br>
+                    ตรวจสอบให้ไม่มีสิ่งใดบังถุงใต้ตา<br>
+                
+                <strong>2. เมื่อเข้าสู่หน้าถ่ายรูป</strong>
+                     ดึงเปลือกตาขวาลง<br>
+                     เลื่อนตาและถุงใต้ตาให้อยู่ในวงกลม<br>
+                    หากตาอยู่ในกรอบวงกลม วงกลมจะเปลี่ยนเป็นสีเขียว<br>
+                     กดถ่ายรูปเมื่อมั่นใจในตำแหน่ง
                 </li>
             </ul>
         </div>
         <button class="button" onclick="startShooting()">เริ่มการถ่ายภาพ</button>
+        <div class="purple-bar top"></div>
     </div>
 
+    <!-- ฟังก์ชันสคริปต์ -->
     <script>
         function startShooting() {
+            alert("คุณกำลังเข้าสู่หน้าถ่ายภาพ...");
             window.location.href = 'page4.html';
         }
     </script>
