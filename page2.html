@@ -21,7 +21,7 @@
         /* สไตล์ของ body */
         body {
             font-family: 'Arial', sans-serif;
-            background: #faf8f8;
+            background: #fffffff2;
             margin: 0;
             padding: 0;
             height: 100vh;
@@ -33,11 +33,11 @@
 
         /* สไตล์ของ container */
         .container {
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: #fffffff2;
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            max-width: 350px;
+            max-width: 400px;
             width: 90%;
             display: none;
         }
@@ -46,9 +46,20 @@
             display: block;
         }
 
-        h1, h2 {
+        h1 {
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+            font-size: 26px; /* ลดขนาดฟอนต์ */
             color: #7c5ba6;
-            margin-bottom: 16px;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+            font-size: 20px; /* ลดขนาดฟอนต์ */
+            color: #7c5ba6;
+            margin-bottom: 15px;
         }
 
         ul {
@@ -59,7 +70,7 @@
 
         ul li {
             margin: 10px 0;
-            font-size: 16px;
+            font-size: 18px;
             color: #333;
         }
 
@@ -67,7 +78,7 @@
             display: flex;
             align-items: center;
             margin-top: 10px;
-            font-size: 16px;
+            font-size: 18px;
             color: #5A3D9A;
             font-weight: bold;
         }
@@ -84,7 +95,7 @@
             margin: 10px 0;
             border: 1px solid #7c5ba6;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 19px;
             box-sizing: border-box;
         }
 
@@ -121,17 +132,17 @@
 <body>
     <!-- Logo -->
     <div class="logo">
-        <img src="03.png" alt="Logo" style="width: 150px; height: 70px;">
+        <img src="03.png" alt="Logo" style="width: 150px; height: 70px;" >
     </div>
 
     <!-- หน้าจอข้อกำหนด -->
     <div class="container active" id="conditions-screen">
-        <h1>ข้อกำหนดในการเข้าใช้งาน</h1>
+        <h1> ข้อกำหนดในการเข้าใช้งาน </h1>
         <ul>
-            <li>- อายุ 18 ปีขึ้นไป</li>
-            <li>- ไม่มีโรคตาหรือหยอดยาตาภายใน 1 เดือน</li>
-            <li>- ไม่เคยเสียเลือดมากหรือได้รับเลือดใน 1 เดือนที่ผ่านมา</li>
-            <li>- ไม่มีประวัติฉายแสงหรือเคมีบำบัด</li>
+            <li> - อายุ 18 ปีขึ้นไป</li>
+            <li> - ไม่มีโรคตาหรือหยอดยาตาภายใน 1 เดือน</li>
+            <li> - ไม่เคยเสียเลือดมากหรือได้รับเลือดภายใน1เดือน</li>
+            <li> - ไม่มีประวัติฉายแสงหรือเคมีบำบัด</li>
         </ul>
         <label>
             <input type="checkbox" id="conditions-check">
