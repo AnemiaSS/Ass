@@ -17,6 +17,7 @@
             align-items: center;
             min-height: 100vh;
             flex-direction: column;
+            position: relative;
         }
 
         .container {
@@ -27,6 +28,10 @@
             max-width: 90%;
             width: 350px;
             text-align: center;
+            position: relative;
+            z-index: 1; /* ให้องค์ประกอบภายใน container อยู่ข้างหน้าแถบสีม่วง */
+            margin-top: 80px; /* ให้มีช่องว่างจากแถบสีม่วงด้านบน */
+            margin-bottom: 80px; /* ให้มีช่องว่างจากแถบสีม่วงด้านล่าง */
         }
 
         h1 {
@@ -56,15 +61,13 @@
             background-color: #f07325;
         }
 
-        
-
         .purple-bar {
             width: 100%;
             height: 60px;
             background-color: #5A3D9A;
             position: fixed;
             left: 0;
-            z-index: 10;
+            z-index: 10; /* ทำให้แถบสีม่วงอยู่ข้างหน้า */
         }
 
         .purple-bar.top {
@@ -95,7 +98,7 @@
 
 <body>
     <div class="purple-bar top"></div>
-    <img src="03.png" alt="ป้าย" style="width:400px;"; height="175px;" />
+    <img src="03.png" alt="ป้าย" style="width:400px; height:175px;" />
     <div class="container">
         <h1>ยินดีต้อนรับสู่ระบบการตรวจ<br>คัดกรองโรคโลหิตจาง</h1>
         <div class="options">
