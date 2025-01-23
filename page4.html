@@ -91,10 +91,6 @@
 </head>
 
 <body>
-    <a class="xx">
-        <img src="03.png" alt="ป้าย" style="width: 150px; height: auto;">
-    </a>
-
     <a href="page4.html" class="button-back-top-right">
         <img src="2.png" alt="ย้อนกลับ" style="width: 50px; height: auto;">
     </a>
@@ -140,21 +136,29 @@
                 await camera.stop();
             }
 
-            camera = new Camera(videoElement, {
-                onFrame: async () => {
-                    await faceMesh.send({ image: videoElement });
+            const constraints = {
+                video: {
+                    facingMode: currentCamera === 'user' ? 'user' : { exact: 'environment' },
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 },
                 },
-                width: 640,
-                height: 480,
-                facingMode: currentCamera,
-            });
+            };
 
-            try {
-                await camera.start();
-            } catch (error) {
-                console.error('Error starting camera:', error);
-                alert('ไม่สามารถเปิดกล้องได้ กรุณาตรวจสอบการอนุญาตการใช้กล้อง');
-            }
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then((stream) => {
+                    videoElement.srcObject = stream;
+                    videoElement.play();
+                    camera = new Camera(videoElement, {
+                        onFrame: async () => {
+                            await faceMesh.send({ image: videoElement });
+                        },
+                    });
+                    camera.start();
+                })
+                .catch((error) => {
+                    console.error('Camera error:', error);
+                    alert('ไม่สามารถเปิดกล้องได้ กรุณาตรวจสอบการอนุญาตการใช้กล้อง');
+                });
         }
 
         function onResults(results) {
@@ -177,70 +181,10 @@
             canvasCtx.restore();
         }
 
-        function captureEyeRegion(landmarks, indices, scaleFactor) {
-    const xCoords = indices.map((idx) => landmarks[idx].x * canvasElement.width);
-    const yCoords = indices.map((idx) => landmarks[idx].y * canvasElement.height);
-
-    const xMin = Math.min(...xCoords);
-    const xMax = Math.max(...xCoords);
-    const yMin = Math.min(...yCoords);
-    const yMax = Math.max(...yCoords);
-
-    const width = xMax - xMin;
-    const height = yMax - yMin;
-    const size = Math.max(width, height) * scaleFactor;
-
-    const centerX = (xMin + xMax) / 2;
-    const centerY = (yMin + yMax) / 2;
-
-    // เพิ่มการครอบตัดให้ตำแหน่งตรงกลางภาพ
-    const x = Math.max(0, centerX - size / 2);
-    const y = Math.max(0, centerY - size / 2);
-
-    return { x: x, y: y, size: size };
-}
-
-function storeCapturedImages(leftRegion, rightRegion) {
-    const captureImage = (region) => {
-        const eyeCanvas = document.createElement('canvas');
-        eyeCanvas.width = eyeCanvas.height = region.size;
-        const eyeCtx = eyeCanvas.getContext('2d');
-
-        // ครอบตัดภาพเฉพาะส่วนที่ต้องการ
-        eyeCtx.drawImage(
-            canvasElement,
-            region.x,
-            region.y,
-            region.size,
-            region.size,
-            0,
-            0,
-            region.size,
-            region.size
-        );
-        return eyeCanvas.toDataURL('image/png');
-    };
-
-    const leftEyeImage = captureImage(leftRegion);
-    const rightEyeImage = captureImage(rightRegion);
-
-    // เก็บภาพลงใน LocalStorage
-    localStorage.setItem('leftEyeImage', leftEyeImage);
-    localStorage.setItem('rightEyeImage', rightEyeImage);
-
-    // ไปยังหน้าถัดไป
-    window.location.href = "page5.html";
-}
-
-document.getElementById('captureButton').addEventListener('click', () => {
-    if (currentLandmarks) {
-        const leftRegion = captureEyeRegion(currentLandmarks, [33, 133, 159, 145, 158, 144], 1.5); // ขยายขนาดพื้นที่
-        const rightRegion = captureEyeRegion(currentLandmarks, [362, 263, 386, 374, 385, 373], 1.5);
-        storeCapturedImages(leftRegion, rightRegion);
-    } else {
-        alert('ไม่พบตำแหน่งดวงตา! กรุณาให้กล้องทำงานอีกครั้ง.');
-    }
-});
+        document.getElementById('flipCamera').addEventListener('click', () => {
+            currentCamera = currentCamera === 'user' ? 'environment' : 'user';
+            startCamera();
+        });
 
         async function initialize() {
             await initializeFaceMesh();
