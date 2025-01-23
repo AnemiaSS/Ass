@@ -46,7 +46,7 @@
         h1 {
             font-weight: bold;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-            font-size: 30px; /* เพิ่มขนาดตัวอักษร 5 */
+            font-size: 30px; 
             color: #7c5ba6;
             margin-bottom: 15px;
         }
@@ -54,7 +54,7 @@
         h2 {
             font-weight: bold;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-            font-size: 28px; /* เพิ่มขนาดตัวอักษร 5 */
+            font-size: 28px; 
             color: #7c5ba6;
             margin-bottom: 15px;
         }
@@ -67,22 +67,25 @@
 
         ul li {
             margin: 10px 0;
-            font-size: 20px; /* เพิ่มขนาดตัวอักษร 5 */
+            font-size: 20px; 
             color: #333;
+        }
+        li {
+             font-size: 20px; 
         }
 
         label {
             display: flex;
             align-items: center;
             margin-top: 10px;
-            font-size: 23px; /* เพิ่มขนาดตัวอักษร 5 */
+            font-size: 23px; 
             color: #5A3D9A;
             font-weight: bold;
         }
 
         input[type="checkbox"] {
-            transform: scale(1.1); /* เพิ่มขนาดขึ้น 10% */
-            margin-right: 10px;
+            transform: scale(2); 
+            margin-right: 20px;
         }
 
         input[type="text"],
@@ -93,7 +96,7 @@
             margin: 10px 0;
             border: 1px solid #7c5ba6;
             border-radius: 8px;
-            font-size: 24px; /* เพิ่มขนาดตัวอักษร 5 */
+            font-size: 24px; 
             box-sizing: border-box;
         }
 
@@ -105,13 +108,13 @@
 
         .button {
             width: 100%;
-            padding: 15px; /* เพิ่มขนาดปุ่มให้เหมาะสม */
+            padding: 15px; 
             margin-top: 10px;
             background-color: #f5b62a;
             color: #fff;
             border: none;
             border-radius: 25px;
-            font-size: 21px; /* เพิ่มขนาดตัวอักษรปุ่ม 5 */
+            font-size: 21px; 
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
@@ -124,6 +127,8 @@
             background-color: #ccc;
             cursor: not-allowed;
         }
+
+        
     </style>
 </head>
 
@@ -144,7 +149,7 @@
         </ul>
         <label>
             <input type="checkbox" id="conditions-check">
-            ข้าพเจ้ามีคุณสมบัติตรงตามข้อกำหนด
+            <li>  ข้าพเจ้ามีคุณสมบัติตรงตามข้อกำหนด </li>
         </label>
         <button class="button" id="proceed-button" disabled>ลงทะเบียน</button>
     </div>
