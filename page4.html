@@ -84,7 +84,8 @@
         .btn-action:hover {
             background-color: #f07325;
         }
-         .xx {
+
+        .xx {
             position: absolute;
             top: 0;
             left: 0;
@@ -120,7 +121,7 @@
         const canvasCtx = canvasElement.getContext('2d');
         let faceMesh;
         let currentLandmarks = null;
-        let currentCamera = 'user'; // เริ่มต้นกล้องหน้า
+        let currentCamera = 'user';
         let camera;
 
         async function initializeFaceMesh() {
@@ -149,7 +150,7 @@
                 },
                 width: 640,
                 height: 480,
-                facingMode: currentCamera, // รองรับกล้องหน้า/หลัง
+                facingMode: currentCamera,
             });
 
             try {
@@ -187,7 +188,9 @@
 
         document.getElementById('captureButton').addEventListener('click', () => {
             if (currentLandmarks) {
-                alert('บันทึกภาพสำเร็จ');
+                const imageData = canvasElement.toDataURL('image/png');
+                localStorage.setItem('capturedImage', imageData);
+                window.location.href = 'page5.html';
             } else {
                 alert('ไม่พบตำแหน่งดวงตา! กรุณาลองใหม่อีกครั้ง.');
             }
@@ -199,9 +202,6 @@
         }
 
         initialize();
-         function startShooting() {
-            window.location.href = 'page5.html'; // Redirect to the shooting page
-        }
     </script>
 </body>
 
