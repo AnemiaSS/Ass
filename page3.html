@@ -25,6 +25,7 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            box-sizing: border-box;
         }
         .button-back-top-right {
             position: absolute;
@@ -37,7 +38,7 @@
 
         h1,
         h2 {
-            font-size: 29px; /* ปรับเพิ่มขึ้น 5px */
+            font-size: 29px;
             color: #7c5ba6;
             margin-bottom: 20px;
         }
@@ -45,7 +46,8 @@
         form {
             text-align: left;
             margin: 0 auto;
-            max-width: 300px;
+            max-width: 80%; /* ทำให้ฟอร์มไม่กว้างเกินไป */
+            width: 100%;
         }
 
         label {
@@ -53,7 +55,7 @@
             margin: 10px 0 5px;
             font-weight: bold;
             color: #7c5ba6;
-            font-size: 21px; /* ปรับเพิ่มขึ้น 5px */
+            font-size: 21px;
         }
 
         /* สไตล์ของกล่องกรอกข้อมูล */
@@ -61,11 +63,11 @@
         input[type="tel"],
         input[type="date"] {
             width: 100%;
-            padding: 19px; /* ปรับเพิ่มขึ้น 5px */
+            padding: 15px;
             margin: 10px 0;
             border: 2px solid #7c5ba6;
             border-radius: 8px;
-            font-size: 21px; /* ปรับเพิ่มขึ้น 5px */
+            font-size: 18px; /* ปรับขนาดตัวอักษร */
             box-sizing: border-box;
             background-color: #f9f9f9;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -82,13 +84,14 @@
         button {
             background-color: #f5b62a;
             color: white;
-            padding: 15px 20px; /* ปรับเพิ่มขึ้น 5px */
+            padding: 15px 0;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 21px; /* ปรับเพิ่มขึ้น 5px */
+            font-size: 22px;
             transition: background-color 0.3s;
-            width: 100%;
+            width: 100%; /* ทำให้ปุ่มเต็มความกว้าง */
+            box-sizing: border-box;
         }
 
         button:focus {
@@ -110,19 +113,19 @@
 
         .confirmation p {
             margin: 10px 0;
-            font-size: 21px; /* ปรับเพิ่มขึ้น 5px */
+            font-size: 18px; /* ปรับขนาดตัวอักษร */
         }
 
         .button-back {
             background-color: #f5b62a;
             color: white;
-            padding: 15px 30px; /* ปรับเพิ่มขึ้น 5px */
+            padding: 15px 30px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             text-decoration: none;
             margin-top: 20px;
-            font-size: 21px; /* ปรับเพิ่มขึ้น 5px */
+            font-size: 21px;
             transition: background-color 0.3s ease;
         }
 
@@ -133,20 +136,20 @@
         .button-next {
             background-color: #f5b62a;
             color: white;
-            padding: 15px 30px; /* ปรับเพิ่มขึ้น 5px */
+            padding: 15px 30px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             text-decoration: none;
             margin-top: 20px;
-            font-size: 21px; /* ปรับเพิ่มขึ้น 5px */
+            font-size: 21px;
             transition: background-color 0.3s ease;
         }
 
         .button-next:hover {
             background-color: #f07325;
         }
-        
+
     </style>
 </head>
 
@@ -157,7 +160,7 @@
     </div>
     <a href="index1.html" class="button-back-top-right">
         <img src="2.png" alt="ย้อนกลับ" style="width: 50px; height: auto;"></a>
-        
+
     <div class="container" id="registration-screen">
         <h1>เข้าสู่ระบบ</h1>
         <form id="register-form">
