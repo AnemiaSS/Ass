@@ -29,12 +29,11 @@
 
         .container {
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
             text-align: center;
             max-width: 90%;
-            width: 500px;
+            width: 400px;
         }
 
         h1,h2 {
@@ -55,49 +54,49 @@
         #images-container {
             display: flex;
             justify-content: space-around;
-            gap: 20px;
+            gap: 15px;
             flex-wrap: wrap;
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
         /* Style for consistent image sizes */
         #images-container img {
-            width: 200px;
-            height: 200px;
+            width: 160px;
+            height: 160px;
             object-fit: cover;
-            border-radius: 10px;
+            border-radius: 8px;
         }
 
         #images-container h2 {
-            font-size: 16px;
+            font-size: 14px;
             color: #555;
         }
 
         /* เพิ่ม media query สำหรับหน้าจอขนาดเล็ก */
         @media (max-width: 768px) {
             h1 {
-                font-size: 22px;
+                font-size: 20px;
             }
 
             h2 {
-                font-size: 18px;
+                font-size: 16px;
             }
 
             /* ปรับขนาดภาพให้เล็กลงบนหน้าจอมือถือ */
             #images-container img {
-                width: 200px;
-                height: 200px;
+                width: 150px;
+                height: 150px;
             }
 
             .container {
-                padding: 15px;
-                width: 90%;
+                padding: 12px;
+                width: 85%;
             }
         }
 
         @media (max-width: 480px) {
             .logo img {
-                width: 120px;
+                width: 100px;
                 height: auto;
             }
 
