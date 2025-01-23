@@ -81,18 +81,19 @@
             outline: none;
         }
 
-        button {
-            background-color: #f5b62a;
-            color: white;
-            padding: 15px 0;
+        .button {
+            width: 60%;
+            padding: 10px 15px;
+            margin-top: 10px;
+            background-color: #ccc; /* สีพื้นฐานเมื่อไม่เลือกเช็คบ็อกซ์ */
+            color: #fff;
             border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 22px;
-            transition: background-color 0.3s;
-            width: 100%; /* ทำให้ปุ่มเต็มความกว้าง */
-            box-sizing: border-box;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: not-allowed;
+            transition: background-color 0.3s ease;
         }
+
 
         button:focus {
             background-color: #f5b62a;
