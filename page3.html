@@ -81,26 +81,31 @@
             outline: none;
         }
 
-         .button {
+        /* ปุ่มแบบเดียวกันทั้งสอง */
+        button,
+        .button-next {
             background-color: #f5b62a;
             color: white;
-            padding: 15px 30px;
+            padding: 20px 40px;
             border: none;
-            border-radius: 5px;
+            border-radius: 50px; /* ความโค้งของปุ่ม */
             cursor: pointer;
             text-decoration: none;
             margin-top: 20px;
-            font-size: 21px;
+            font-size: 24px;
             transition: background-color 0.3s ease;
+            width: 100%; /* ให้ปุ่มมีความกว้างเต็มหน้าจอ */
+            box-sizing: border-box;
         }
 
-
-        button:focus {
-            background-color: #f5b62a;
-        }
-
-        button:hover {
+        button:hover,
+        .button-next:hover {
             background-color: #f07325;
+        }
+
+        button:focus,
+        .button-next:focus {
+            background-color: #f5b62a;
         }
 
         .confirmation-screen {
@@ -131,23 +136,6 @@
         }
 
         .button-back:hover {
-            background-color: #f07325;
-        }
-
-        .button-next {
-            background-color: #f5b62a;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            text-decoration: none;
-            margin-top: 10px;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-
-        .button-next:hover {
             background-color: #f07325;
         }
 
