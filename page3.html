@@ -37,7 +37,7 @@
 
         h1,
         h2 {
-            font-size: 24px;
+            font-size: 34px; /* ปรับขนาดตัวอักษรใหญ่ขึ้น 10px */
             color: #7c5ba6;
             margin-bottom: 20px;
         }
@@ -53,6 +53,7 @@
             margin: 10px 0 5px;
             font-weight: bold;
             color: #7c5ba6;
+            font-size: 20px; /* ปรับขนาดตัวอักษรใหญ่ขึ้น 10px */
         }
 
         /* สไตล์ของกล่องกรอกข้อมูล */
@@ -60,11 +61,11 @@
         input[type="tel"],
         input[type="date"] {
             width: 100%;
-            padding: 14px;
+            padding: 24px; /* ปรับขนาด padding ใหญ่ขึ้น 10px */
             margin: 10px 0;
             border: 2px solid #7c5ba6;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 26px; /* ปรับขนาดตัวอักษรใหญ่ขึ้น 10px */
             box-sizing: border-box;
             background-color: #f9f9f9;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -80,20 +81,18 @@
 
         button {
             background-color: #f5b62a;
-            /* สีม่วง */
             color: white;
-            padding: 10px 15px;
+            padding: 20px 25px; /* ปรับขนาด padding ใหญ่ขึ้น 10px */
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 26px; /* ปรับขนาดตัวอักษรใหญ่ขึ้น 10px */
             transition: background-color 0.3s;
             width: 100%;
         }
 
         button:focus {
             background-color: #f5b62a;
-            /* สีส้มเมื่อ focus */
         }
 
         button:hover {
@@ -102,7 +101,6 @@
 
         .confirmation-screen {
             display: none;
-            /* Hide confirmation screen by default */
         }
 
         .confirmation {
@@ -117,13 +115,13 @@
         .button-back {
             background-color: #f5b62a;
             color: white;
-            padding: 12px 25px;
+            padding: 20px 30px; /* ปรับขนาด padding ใหญ่ขึ้น 10px */
             border: none;
             border-radius: 5px;
             cursor: pointer;
             text-decoration: none;
             margin-top: 20px;
-            font-size: 16px;
+            font-size: 26px; /* ปรับขนาดตัวอักษรใหญ่ขึ้น 10px */
             transition: background-color 0.3s ease;
         }
 
@@ -134,13 +132,13 @@
         .button-next {
             background-color: #f5b62a;
             color: white;
-            padding: 12px 25px;
+            padding: 20px 30px; /* ปรับขนาด padding ใหญ่ขึ้น 10px */
             border: none;
             border-radius: 5px;
             cursor: pointer;
             text-decoration: none;
             margin-top: 20px;
-            font-size: 16px;
+            font-size: 26px; /* ปรับขนาดตัวอักษรใหญ่ขึ้น 10px */
             transition: background-color 0.3s ease;
         }
 
@@ -157,7 +155,7 @@
         <img src="03.png" alt="ป้าย" style="width: 150px; height: auto;">
     </div>
     <a href="index1.html" class="button-back-top-right">
-        <img src="2.png" alt="ย้อนกลับ" style="width: 50px; height: aoto;"></a>
+        <img src="2.png" alt="ย้อนกลับ" style="width: 50px; height: auto;"></a>
         
     <div class="container" id="registration-screen">
         <h1>เข้าสู่ระบบ</h1>
@@ -177,8 +175,8 @@
 
     <div class="container confirmation-screen" id="confirmation-screen">
         <h2>คำแนะนำการใช้งาน</h2>
-    <div class="confirmation">
-        <ul>
+        <div class="confirmation">
+            <ul>
                 <li>
                     <strong>1. เตรียมตัว</strong><br>
                     - ใช้ถุงใต้ตาเป็นจุดสังเกต<br>
@@ -194,7 +192,7 @@
                     - กดถ่ายรูปเมื่อมั่นใจในตำแหน่ง
                 </li>
             </ul>
-    </div>
+        </div>
         <button class="button-next" onclick="startShooting()">เริ่มการถ่ายภาพ</button>
     </div>
 
