@@ -13,7 +13,7 @@
             left: 0;
             margin: 10px;
         }
-        /* สไตล์ของ body */
+
         body {
             font-family: 'Arial', sans-serif;
             background: #faf8f8;
@@ -27,6 +27,7 @@
             flex-direction: column;
             box-sizing: border-box;
         }
+
         .button-back-top-right {
             position: absolute;
             top: 20px;
@@ -36,8 +37,7 @@
             justify-content: center;
         }
 
-        h1,
-        h2 {
+        h1, h2 {
             font-size: 29px;
             color: #7c5ba6;
             margin-bottom: 20px;
@@ -46,7 +46,7 @@
         form {
             text-align: left;
             margin: 0 auto;
-            max-width: 80%; /* ทำให้ฟอร์มไม่กว้างเกินไป */
+            max-width: 80%;
             width: 100%;
         }
 
@@ -58,58 +58,41 @@
             font-size: 21px;
         }
 
-        /* สไตล์ของกล่องกรอกข้อมูล */
-        input[type="text"],
-        input[type="tel"],
-        input[type="date"] {
+        input[type="text"], input[type="tel"], input[type="date"] {
             width: 100%;
             padding: 15px;
             margin: 10px 0;
             border: 2px solid #7c5ba6;
             border-radius: 8px;
-            font-size: 18px; /* ปรับขนาดตัวอักษร */
+            font-size: 18px;
             box-sizing: border-box;
             background-color: #f9f9f9;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-        input[type="text"]:focus,
-        input[type="tel"]:focus,
-        input[type="date"]:focus {
+        input[type="text"]:focus, input[type="tel"]:focus, input[type="date"]:focus {
             border-color: #f5b62a;
             box-shadow: 0 0 5px rgba(245, 130, 32, 0.7);
             outline: none;
         }
 
-        /* ปุ่มแบบเดียวกันทั้งสอง */
-        button,
-        .button-next {
+        button, .button-next {
             background-color: #f5b62a;
             color: white;
             padding: 10px 15px;
             border: none;
-            border-radius: 20px; /* ความโค้งของปุ่ม */
+            border-radius: 20px;
             cursor: pointer;
             text-decoration: none;
             margin-top: 20px;
             font-size: 16px;
             transition: background-color 0.3s ease, transform 0.2s ease;
-            width: 100%; /* ให้ปุ่มมีความกว้างเต็มหน้าจอ */
+            width: 100%;
             box-sizing: border-box;
         }
 
-        button:hover,
-        .button-next:hover {
+        button:hover, .button-next:hover {
             background-color: #f07325;
-        }
-
-        button:focus,
-        .button-next:focus {
-            background-color: #f5b62a;
-        }
-
-        .confirmation-screen {
-            display: none;
         }
 
         .confirmation {
@@ -117,28 +100,17 @@
             margin-top: 20px;
         }
 
-        .confirmation p {
+        ul {
+            text-align: left;
+            margin: 15px 0;
+            padding-left: 10px;
+            font-size: 16px;
+        }
+
+        ul li {
             margin: 10px 0;
-            font-size: 18px; /* ปรับขนาดตัวอักษร */
+            color: #555555;
         }
-
-        .button-back {
-            background-color: #f5b62a;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            margin-top: 20px;
-            font-size: 21px;
-            transition: background-color 0.3s ease;
-        }
-
-        .button-back:hover {
-            background-color: #f07325;
-        }
-
     </style>
 </head>
 
@@ -156,8 +128,8 @@
             <label for="name">ชื่อ</label>
             <input type="text" id="name" placeholder="ใส่ชื่อ" required>
 
-            <label for="name">นามสกุล</label>
-            <input type="text" id="name" placeholder="ใส่นามสกุล" required>
+            <label for="lastname">นามสกุล</label>
+            <input type="text" id="lastname" placeholder="ใส่นามสกุล" required>
 
             <label for="phone">เบอร์โทรศัพท์</label>
             <input type="tel" id="phone" placeholder="ใส่เบอร์โทรศัพท์" required>
@@ -166,7 +138,7 @@
         </form>
     </div>
 
-    <div class="container confirmation-screen" id="confirmation-screen">
+    <div class="container confirmation-screen" id="confirmation-screen" style="display: none;">
         <h2>คำแนะนำการใช้งาน</h2>
         <div class="confirmation">
             <ul>
@@ -197,7 +169,7 @@
         });
 
         function startShooting() {
-            window.location.href = 'page4.html'; // Redirect to the shooting page
+            window.location.href = 'page4.html';
         }
     </script>
 </body>
