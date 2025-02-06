@@ -147,13 +147,20 @@
         let faceMesh;
         let currentLandmarks = null;
         let currentCamera = 'user'; // เริ่มต้นด้วยกล้องหน้า
-        let camera;
+        let cameraStream = null;
 
         // เริ่มต้นกล้อง
         async function startCamera() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: currentCamera } });
-                videoElement.srcObject = stream;
+                // หยุดกล้องที่เปิดอยู่ก่อน
+                if (cameraStream) {
+                    const tracks = cameraStream.getTracks();
+                    tracks.forEach(track => track.stop());
+                }
+
+                // เริ่มกล้องใหม่
+                cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: currentCamera } });
+                videoElement.srcObject = cameraStream;
                 videoElement.style.display = 'none'; // ซ่อน video element
 
                 // เริ่มต้น @mediapipe หลังจากที่กล้องเปิดแล้ว
@@ -181,7 +188,8 @@
         }
 
         function initializeCamera() {
-            camera = new Camera(videoElement, {
+            // ตั้งค่ากล้อง
+            const camera = new Camera(videoElement, {
                 onFrame: async () => {
                     await faceMesh.send({ image: videoElement });
                 },
@@ -199,8 +207,7 @@
 
             canvasCtx.save();
             canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-            canvasCtx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
-
+            // การแสดงผลเฉพาะจากการประมวลผลของ FaceMesh ไม่แสดงวิดีโอพื้นหลัง
             if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
                 currentLandmarks = results.multiFaceLandmarks[0];
             }
