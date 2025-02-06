@@ -124,7 +124,7 @@
     <a class="xx">
         <img src="03.png" alt="ป้าย" style="width: 150px; height: 70px;">
     </a>
-
+    
     <a href="page4.html" class="button-back-top-right">
         <img src="2.png" alt="ย้อนกลับ" style="width: 50px; height: 40px;">
     </a>
@@ -134,6 +134,7 @@
         <div class="camera-controls">
             <button id="flipCamera" class="camera-btn">สลับกล้อง</button>
         </div>
+        <video id="video" autoplay muted style="display:none;"></video>
         <canvas id="outputCanvas" class="main-canvas"></canvas>
         <button id="captureButton" class="btn-action">
             <img src="04.png" alt="ถ่ายภาพ" style="width: 40px; height: 30px;">
@@ -141,36 +142,13 @@
     </div>
 
     <script>
-        const videoElement = document.createElement('video'); // ไม่แสดง video ตรงๆ
+        const videoElement = document.getElementById('video');
         const canvasElement = document.getElementById('outputCanvas');
         const canvasCtx = canvasElement.getContext('2d');
         let faceMesh;
         let currentLandmarks = null;
-        let currentCamera = 'user'; // เริ่มต้นด้วยกล้องหน้า
-        let cameraStream = null;
-
-        // เริ่มต้นกล้อง
-        async function startCamera() {
-            try {
-                // หยุดกล้องที่เปิดอยู่ก่อน
-                if (cameraStream) {
-                    const tracks = cameraStream.getTracks();
-                    tracks.forEach(track => track.stop());
-                }
-
-                // เริ่มกล้องใหม่
-                cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: currentCamera } });
-                videoElement.srcObject = cameraStream;
-                videoElement.style.display = 'none'; // ซ่อน video element
-
-                // เริ่มต้น @mediapipe หลังจากที่กล้องเปิดแล้ว
-                initializeFaceMesh();
-                initializeCamera();
-            } catch (err) {
-                console.error('Error starting camera:', err);
-                alert('ไม่สามารถเปิดกล้องได้ กรุณาตรวจสอบการอนุญาตการใช้กล้อง');
-            }
-        }
+        let currentCamera = 'user';
+        let camera;
 
         async function initializeFaceMesh() {
             faceMesh = new FaceMesh({
@@ -187,9 +165,12 @@
             faceMesh.onResults(onResults);
         }
 
-        function initializeCamera() {
-            // ตั้งค่ากล้อง
-            const camera = new Camera(videoElement, {
+        async function startCamera() {
+            if (camera) {
+                await camera.stop();
+            }
+
+            camera = new Camera(videoElement, {
                 onFrame: async () => {
                     await faceMesh.send({ image: videoElement });
                 },
@@ -198,7 +179,12 @@
                 facingMode: currentCamera
             });
 
-            camera.start();
+            try {
+                await camera.start();
+            } catch (error) {
+                console.error('Error starting camera:', error);
+                alert('ไม่สามารถเปิดกล้องได้ กรุณาตรวจสอบการอนุญาตการใช้กล้อง');
+            }
         }
 
         function onResults(results) {
@@ -207,7 +193,8 @@
 
             canvasCtx.save();
             canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-            // การแสดงผลเฉพาะจากการประมวลผลของ FaceMesh ไม่แสดงวิดีโอพื้นหลัง
+            canvasCtx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+
             if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
                 currentLandmarks = results.multiFaceLandmarks[0];
             }
@@ -274,9 +261,8 @@
         }
 
         document.getElementById('flipCamera').addEventListener('click', async () => {
-            // สลับกล้องหน้า/หลัง
             currentCamera = currentCamera === 'user' ? 'environment' : 'user';
-            await startCamera(); // เริ่มกล้องใหม่
+            await startCamera();
         });
 
         document.getElementById('captureButton').addEventListener('click', () => {
@@ -289,9 +275,12 @@
             }
         });
 
-        // เริ่มต้นกล้องเมื่อหน้าเว็บโหลด
-        startCamera();
+        async function initialize() {
+            await initializeFaceMesh();
+            await startCamera();
+        }
+
+        initialize();
     </script>
 </body>
-
 </html>
