@@ -146,13 +146,13 @@
         const canvasCtx = canvasElement.getContext('2d');
         let faceMesh;
         let currentLandmarks = null;
-        let currentCamera = 'user';
+        let currentCamera = 'user'; // เริ่มต้นด้วยกล้องหน้า
         let camera;
 
         // เริ่มต้นกล้อง
         async function startCamera() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: currentCamera } });
                 videoElement.srcObject = stream;
                 videoElement.style.display = 'none'; // ซ่อน video element
 
@@ -267,8 +267,9 @@
         }
 
         document.getElementById('flipCamera').addEventListener('click', async () => {
+            // สลับกล้องหน้า/หลัง
             currentCamera = currentCamera === 'user' ? 'environment' : 'user';
-            await startCamera();
+            await startCamera(); // เริ่มกล้องใหม่
         });
 
         document.getElementById('captureButton').addEventListener('click', () => {
