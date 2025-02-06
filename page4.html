@@ -134,7 +134,6 @@
         <div class="camera-controls">
             <button id="flipCamera" class="camera-btn">สลับกล้อง</button>
         </div>
-        <video id="video" autoplay muted style="display:none;"></video>
         <canvas id="outputCanvas" class="main-canvas"></canvas>
         <button id="captureButton" class="btn-action">
             <img src="04.png" alt="ถ่ายภาพ" style="width: 40px; height: 30px;">
@@ -142,7 +141,7 @@
     </div>
 
     <script>
-        const videoElement = document.getElementById('video');
+        const videoElement = document.createElement('video'); // ไม่แสดง video ตรงๆ
         const canvasElement = document.getElementById('outputCanvas');
         const canvasCtx = canvasElement.getContext('2d');
         let faceMesh;
@@ -155,7 +154,7 @@
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 videoElement.srcObject = stream;
-                videoElement.style.display = 'block';
+                videoElement.style.display = 'none'; // ซ่อน video element
 
                 // เริ่มต้น @mediapipe หลังจากที่กล้องเปิดแล้ว
                 initializeFaceMesh();
