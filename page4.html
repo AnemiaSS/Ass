@@ -25,6 +25,9 @@
             position: absolute;
             top: 20px;
             right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .button-back-top-right img {
@@ -61,7 +64,7 @@
             border-radius: 10px;
             max-width: 100%;
             max-height: 400px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 4px #7c5ba6(0, 0, 0, 0.2);
             margin: 15px 0;
         }
 
@@ -87,27 +90,54 @@
         .btn-action:hover {
             background-color: #f07325;
         }
+
+        .xx {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 10px;
+        }
+
+        .camera-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .camera-btn {
+            background-color: #f5b62a;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .camera-btn:hover {
+            background-color: #f07325;
+        }
     </style>
 </head>
 
 <body>
     <a class="xx">
-        <img src="03.png" alt="ป้าย" style="width: 150px; height: auto;">
+        <img src="03.png" alt="ป้าย" style="width: 150px; height: 70px;">
     </a>
-
+    
     <a href="page4.html" class="button-back-top-right">
-        <img src="2.png" alt="ย้อนกลับ" style="width: 50px; height: auto;">
+        <img src="2.png" alt="ย้อนกลับ" style="width: 50px; height: 40px;">
     </a>
 
     <div class="container">
         <h1>ถ่ายภาพเพื่อวิเคราะห์</h1>
-        <div class="controls">
-            <button id="flipCamera" class="btn-action">สลับกล้อง</button>
+        <div class="camera-controls">
+            <button id="flipCamera" class="camera-btn">สลับกล้อง</button>
         </div>
         <video id="video" autoplay muted style="display:none;"></video>
         <canvas id="outputCanvas" class="main-canvas"></canvas>
         <button id="captureButton" class="btn-action">
-            <img src="04.png" alt="ถ่ายภาพ" style="width: 40px; height: auto;">
+            <img src="04.png" alt="ถ่ายภาพ" style="width: 40px; height: 30px;">
         </button>
     </div>
 
@@ -146,7 +176,7 @@
                 },
                 width: 640,
                 height: 480,
-                facingMode: currentCamera,
+                facingMode: currentCamera
             });
 
             try {
@@ -160,87 +190,18 @@
         function onResults(results) {
             canvasElement.width = videoElement.videoWidth;
             canvasElement.height = videoElement.videoHeight;
-
-            canvasCtx.save();
             canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-
-            // Flip canvas horizontally for mirror effect
-            canvasCtx.translate(canvasElement.width, 0);
-            canvasCtx.scale(-1, 1);
-
             canvasCtx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
 
             if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
                 currentLandmarks = results.multiFaceLandmarks[0];
             }
-
-            canvasCtx.restore();
         }
 
-        function captureEyeRegion(landmarks, indices, scaleFactor) {
-    const xCoords = indices.map((idx) => landmarks[idx].x * canvasElement.width);
-    const yCoords = indices.map((idx) => landmarks[idx].y * canvasElement.height);
-
-    const xMin = Math.min(...xCoords);
-    const xMax = Math.max(...xCoords);
-    const yMin = Math.min(...yCoords);
-    const yMax = Math.max(...yCoords);
-
-    const width = xMax - xMin;
-    const height = yMax - yMin;
-    const size = Math.max(width, height) * scaleFactor;
-
-    const centerX = (xMin + xMax) / 2;
-    const centerY = (yMin + yMax) / 2;
-
-    // เพิ่มการครอบตัดให้ตำแหน่งตรงกลางภาพ
-    const x = Math.max(0, centerX - size / 2);
-    const y = Math.max(0, centerY - size / 2);
-
-    return { x: x, y: y, size: size };
-}
-
-function storeCapturedImages(leftRegion, rightRegion) {
-    const captureImage = (region) => {
-        const eyeCanvas = document.createElement('canvas');
-        eyeCanvas.width = eyeCanvas.height = region.size;
-        const eyeCtx = eyeCanvas.getContext('2d');
-
-        // ครอบตัดภาพเฉพาะส่วนที่ต้องการ
-        eyeCtx.drawImage(
-            canvasElement,
-            region.x,
-            region.y,
-            region.size,
-            region.size,
-            0,
-            0,
-            region.size,
-            region.size
-        );
-        return eyeCanvas.toDataURL('image/png');
-    };
-
-    const leftEyeImage = captureImage(leftRegion);
-    const rightEyeImage = captureImage(rightRegion);
-
-    // เก็บภาพลงใน LocalStorage
-    localStorage.setItem('leftEyeImage', leftEyeImage);
-    localStorage.setItem('rightEyeImage', rightEyeImage);
-
-    // ไปยังหน้าถัดไป
-    window.location.href = "page5.html";
-}
-
-document.getElementById('captureButton').addEventListener('click', () => {
-    if (currentLandmarks) {
-        const leftRegion = captureEyeRegion(currentLandmarks, [33, 133, 159, 145, 158, 144], 1.5); // ขยายขนาดพื้นที่
-        const rightRegion = captureEyeRegion(currentLandmarks, [362, 263, 386, 374, 385, 373], 1.5);
-        storeCapturedImages(leftRegion, rightRegion);
-    } else {
-        alert('ไม่พบตำแหน่งดวงตา! กรุณาให้กล้องทำงานอีกครั้ง.');
-    }
-});
+        document.getElementById('flipCamera').addEventListener('click', async () => {
+            currentCamera = currentCamera === 'user' ? 'environment' : 'user';
+            await startCamera();
+        });
 
         async function initialize() {
             await initializeFaceMesh();
@@ -250,5 +211,5 @@ document.getElementById('captureButton').addEventListener('click', () => {
         initialize();
     </script>
 </body>
+</html>
 
-</html> ปรับให้กล้องใช้ได้กับมือถือด้วย และเอากรอบเงาออกด้วย
