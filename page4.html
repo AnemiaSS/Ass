@@ -129,7 +129,7 @@
         <div class="camera-controls">
             <button id="flipCamera" class="camera-btn">สลับกล้อง</button>
         </div>
-        <video id="video" autoplay playsinline muted style="display:none;"></video>
+        <video id="video" autoplay muted style="display:none;"></video>
         <canvas id="outputCanvas" class="main-canvas"></canvas>
         <button id="captureButton" class="btn-action">
             <img src="04.png" alt="ถ่ายภาพ" style="width: 40px; height: 30px;">
@@ -145,36 +145,19 @@
         let currentCamera = 'user';
         let camera;
 
-        // เริ่มการทำงานทันทีเมื่อโหลดหน้าเว็บ
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                await initializeFaceMesh();
-                await startCamera();
-            } catch (error) {
-                console.error('Error initializing:', error);
-                alert('ไม่สามารถเริ่มกล้องได้ กรุณารีเฟรชหน้าเว็บ');
-            }
-        });
-
         async function initializeFaceMesh() {
             faceMesh = new FaceMesh({
-                locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+                locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`,
             });
 
             faceMesh.setOptions({
                 maxNumFaces: 1,
                 refineLandmarks: true,
                 minDetectionConfidence: 0.5,
-                minTrackingConfidence: 0.5
+                minTrackingConfidence: 0.5,
             });
 
             faceMesh.onResults(onResults);
-            
-            return new Promise((resolve) => {
-                faceMesh.onComplete = () => {
-                    resolve();
-                };
-            });
         }
 
         async function startCamera() {
@@ -286,6 +269,13 @@
                 alert('ไม่พบตำแหน่งดวงตา! กรุณาให้กล้องทำงานอีกครั้ง.');
             }
         });
+
+        async function initialize() {
+            await initializeFaceMesh();
+            await startCamera();
+        }
+
+        initialize();
     </script>
 </body>
 </html>
