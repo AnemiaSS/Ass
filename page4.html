@@ -86,14 +86,15 @@
     </div>
 
     <script>
-        const videoElement = document.getElementById('video');
-        const canvasElement = document.getElementById('outputCanvas');
-        const canvasCtx = canvasElement.getContext('2d');
         let currentCamera = 'user';
         let faceMesh;
         let camera;
+        const videoElement = document.getElementById('video');
+        const canvasElement = document.getElementById('outputCanvas');
+        const canvasCtx = canvasElement.getContext('2d');
         let currentLandmarks = null;
 
+        // เริ่มกล้อง
         async function startCamera() {
             try {
                 if (videoElement.srcObject) {
@@ -104,6 +105,7 @@
                 });
                 videoElement.srcObject = stream;
                 await videoElement.play();
+
                 if (!faceMesh) {
                     faceMesh = new FaceMesh({
                         locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`,
@@ -116,6 +118,7 @@
                     });
                     faceMesh.onResults(onResults);
                 }
+
                 if (camera) {
                     camera.stop();
                 }
@@ -133,6 +136,7 @@
             }
         }
 
+        // ฟังก์ชันสลับกล้อง
         function switchCamera() {
             currentCamera = currentCamera === 'user' ? 'environment' : 'user';
             startCamera();
@@ -154,6 +158,8 @@
         }
 
         document.getElementById('flipCamera').addEventListener('click', switchCamera);
+
+        // ฟังก์ชันถ่ายภาพและบันทึก
         document.getElementById('captureButton').addEventListener('click', () => {
             if (!currentLandmarks) return;
 
