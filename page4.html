@@ -55,9 +55,20 @@
         .camera-btn:hover {
             background-color: #f07325;
         }
+        .xx {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 10px;
+        }
     </style>
 </head>
+
 <body>
+    <a class="xx">
+        <img src="03.png" alt="ป้าย" style="width: 150px; height: 70px;">
+    </a>
+
     <div class="container">
         <h1>ถ่ายภาพเพื่อวิเคราะห์</h1>
         <div class="camera-controls">
@@ -72,7 +83,7 @@
         const videoElement = document.getElementById('video');
         const canvasElement = document.getElementById('outputCanvas');
         const canvasCtx = canvasElement.getContext('2d');
-        let currentCamera = 'user';
+        let currentCamera = 'environment'; // ใช้กล้องหลังเป็นค่าเริ่มต้น
         let faceMesh;
         let camera;
         let currentLandmarks = null;
@@ -83,7 +94,7 @@
                     videoElement.srcObject.getTracks().forEach(track => track.stop());
                 }
                 const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: currentCamera }
+                    video: { facingMode: currentCamera } // ใช้ currentCamera เพื่อเลือกกล้อง
                 });
                 videoElement.srcObject = stream;
                 await videoElement.play();
