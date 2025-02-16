@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,7 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
     <style>
-        /* Original styles remain unchanged */
         body {
             font-family: 'Arial', sans-serif;
             background: #faf8f8;
@@ -52,6 +52,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            position: relative;
         }
 
         h1 {
@@ -64,7 +65,7 @@
             border-radius: 10px;
             max-width: 100%;
             max-height: 400px;
-            box-shadow: 0 2px 4px #7c5ba6(0, 0, 0, 0.2);
+            box-shadow: 0 2px 4px rgba(124, 91, 166, 0.2);
             margin: 15px 0;
         }
 
@@ -111,11 +112,27 @@
             background-color: #f07325;
         }
 
+        .camera-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
         .xx {
             position: absolute;
             top: 0;
             left: 0;
             margin: 10px;
+        }
+
+        #cameraStatus {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -135,6 +152,7 @@
             <button id="flipCamera" class="camera-btn">สลับกล้อง</button>
         </div>
         <canvas id="outputCanvas" class="main-canvas"></canvas>
+        <div id="cameraStatus"></div>
         <button id="captureButton" class="btn-action">
             <img src="04.png" alt="ถ่ายภาพ" style="width: 40px; height: 30px;">
         </button>
@@ -142,16 +160,26 @@
 
     <script>
         const videoElement = document.createElement('video');
-        videoElement.setAttribute('playsinline', ''); // เพิ่ม playsinline สำหรับ iOS
+        videoElement.setAttribute('playsinline', '');
+        videoElement.setAttribute('autoplay', '');
+        videoElement.setAttribute('muted', '');
+        
         const canvasElement = document.getElementById('outputCanvas');
         const canvasCtx = canvasElement.getContext('2d');
+        const flipButton = document.getElementById('flipCamera');
+        const statusElement = document.getElementById('cameraStatus');
+        
         let faceMesh;
         let currentLandmarks = null;
-        let currentCamera = 'user';
         let camera;
         let isInitialized = false;
+        let currentCamera = localStorage.getItem('preferredCamera') || 'user';
 
-        // เตรียม FaceMesh ก่อน
+        // Update UI to show current camera
+        function updateCameraStatus() {
+            statusElement.textContent = currentCamera === 'user' ? 'กล้องหน้า' : 'กล้องหลัง';
+        }
+
         async function initializeFaceMesh() {
             if (!faceMesh) {
                 faceMesh = new FaceMesh({
@@ -168,45 +196,55 @@
             }
         }
 
+        async function stopCurrentCamera() {
+            if (videoElement.srcObject) {
+                const tracks = videoElement.srcObject.getTracks();
+                tracks.forEach(track => track.stop());
+                videoElement.srcObject = null;
+            }
+            if (camera) {
+                camera.stop();
+            }
+        }
+
         async function startCamera() {
+            flipButton.disabled = true;
             try {
-                // ตรวจสอบว่ามีกล้องหรือไม่
-                const devices = await navigator.mediaDevices.enumerateDevices();
-                const cameras = devices.filter(device => device.kind === 'videoinput');
-                
-                if (cameras.length === 0) {
-                    throw new Error('ไม่พบกล้อง');
-                }
+                await stopCurrentCamera();
 
-                // หยุดกล้องที่กำลังทำงานอยู่
-                if (videoElement.srcObject) {
-                    videoElement.srcObject.getTracks().forEach(track => track.stop());
-                }
-
-                // เริ่มกล้องใหม่
                 const constraints = {
                     video: {
-                        facingMode: currentCamera,
+                        facingMode: { exact: currentCamera },
                         width: { ideal: 640 },
                         height: { ideal: 480 }
                     }
                 };
 
-                const stream = await navigator.mediaDevices.getUserMedia(constraints);
-                videoElement.srcObject = stream;
-                
-                // รอให้ FaceMesh พร้อมก่อนเริ่มกล้อง
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                    videoElement.srcObject = stream;
+                } catch (err) {
+                    console.warn('Exact facingMode failed, trying without exact:', err);
+                    const fallbackConstraints = {
+                        video: {
+                            facingMode: currentCamera,
+                            width: { ideal: 640 },
+                            height: { ideal: 480 }
+                        }
+                    };
+                    const stream = await navigator.mediaDevices.getUserMedia(fallbackConstraints);
+                    videoElement.srcObject = stream;
+                }
+
+                localStorage.setItem('preferredCamera', currentCamera);
+                updateCameraStatus();
+
                 if (!isInitialized) {
                     await initializeFaceMesh();
                 }
 
-                // เริ่ม Camera Utils หลังจาก video พร้อม
                 await videoElement.play();
-                
-                if (camera) {
-                    camera.stop();
-                }
-                
+
                 camera = new Camera(videoElement, {
                     onFrame: async () => {
                         await faceMesh.send({ image: videoElement });
@@ -214,18 +252,30 @@
                     width: 640,
                     height: 480
                 });
-                
-                camera.start();
 
+                await camera.start();
+                
             } catch (err) {
                 console.error('Camera error:', err);
-                alert('ไม่สามารถเปิดกล้องได้ กรุณาอนุญาตการเข้าถึงกล้องในเบราว์เซอร์');
+                alert('ไม่สามารถเปิดกล้องได้ กรุณาตรวจสอบการอนุญาตการเข้าถึงกล้อง');
+                currentCamera = 'user';
+                localStorage.setItem('preferredCamera', currentCamera);
+                updateCameraStatus();
+                try {
+                    await startCamera();
+                } catch (retryErr) {
+                    console.error('Retry camera error:', retryErr);
+                }
+            } finally {
+                flipButton.disabled = false;
             }
         }
 
         function onResults(results) {
-            canvasElement.width = videoElement.videoWidth;
-            canvasElement.height = videoElement.videoHeight;
+            if (!canvasElement.width || !canvasElement.height) {
+                canvasElement.width = videoElement.videoWidth;
+                canvasElement.height = videoElement.videoHeight;
+            }
 
             canvasCtx.save();
             canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
@@ -233,6 +283,8 @@
 
             if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
                 currentLandmarks = results.multiFaceLandmarks[0];
+            } else {
+                currentLandmarks = null;
             }
 
             canvasCtx.restore();
@@ -296,17 +348,24 @@
             window.location.href = "page5.html";
         }
 
-        // ปรับปรุงการสลับกล้อง
         let isSwitching = false;
-        document.getElementById('flipCamera').addEventListener('click', async () => {
-            if (isSwitching) return; // ป้องกันการกดปุ่มซ้ำ
+        flipButton.addEventListener('click', async () => {
+            if (isSwitching) return;
+            
             isSwitching = true;
+            flipButton.disabled = true;
             
             try {
                 currentCamera = currentCamera === 'user' ? 'environment' : 'user';
                 await startCamera();
+            } catch (err) {
+                console.error('Error switching camera:', err);
+                currentCamera = currentCamera === 'user' ? 'environment' : 'user';
+                localStorage.setItem('preferredCamera', currentCamera);
+                updateCameraStatus();
             } finally {
                 isSwitching = false;
+                flipButton.disabled = false;
             }
         });
 
@@ -320,8 +379,15 @@
             }
         });
 
-        // เริ่มต้นระบบ
-        initializeFaceMesh().then(() => startCamera());
+        // Initialize on page load
+        window.addEventListener('load', async () => {
+            try {
+                await startCamera();
+            } catch (err) {
+                console.error('Initial camera start error:', err);
+            }
+        });
     </script>
 </body>
+
 </html>
