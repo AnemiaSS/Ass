@@ -5,9 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
-       body {
+body {
     font-family: 'Arial', sans-serif;
-    background: #faf8f8;
     text-align: center;
     margin: 0;
     padding: 0;
@@ -20,28 +19,28 @@
 }
 
 .container {
-    background-color: rgba(255, 255, 255, 0.9);
     padding: 30px 25px;
     border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     text-align: center;
     width: 90%;
     max-width: 500px;
     margin: 20px;
     box-sizing: border-box;
-    border: none; /* ลบกรอบสีขาว */
+    /* ลบกรอบและเงา */
+    box-shadow: none;
+    border: none;
 }
 
 h1 {
     font-family: 'Prompt', 'Sarabun', sans-serif;
     font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     font-size: 28px;
     color: #7c5ba6;
     margin-bottom: 20px;
     line-height: 1.6;
     padding-left: 10px;
     padding-right: 10px;
+    text-shadow: none; /* ลบเงาจากตัวอักษร */
 }
 
 h2 {
@@ -72,8 +71,8 @@ label {
     margin-bottom: 5px;
     font-weight: bold;
     gap: 10px;
-    padding-left: 10px; /* เพิ่มระยะห่างจากขอบ */
-    padding-right: 10px; /* เพิ่มระยะห่างจากขอบ */
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 input[type="checkbox"] {
@@ -95,15 +94,15 @@ input[type="date"] {
     box-sizing: border-box;
     background-color: #f9f9f9;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    padding-left: 10px; /* เพิ่มระยะห่างจากขอบ */
-    padding-right: 10px; /* เพิ่มระยะห่างจากขอบ */
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 input[type="text"]:focus,
 input[type="tel"]:focus,
 input[type="date"]:focus {
     border-color: #f5b62a;
-    box-shadow: 0 0 5px rgba(245, 130, 32, 0.7);
+    box-shadow: none; /* ลบเงา */
     outline: none;
 }
 
@@ -155,10 +154,8 @@ input::placeholder {
 
 .container,
 .card {
-    background-color: rgba(255, 255, 255, 0.95);
     padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 8px 16px #7c5ba6(0, 0, 0, 0.1);
     text-align: center;
     width: 100%;
     max-width: 500px;
@@ -170,12 +167,13 @@ input::placeholder {
     display: block;
     opacity: 1;
 }
+
 .xx {
-            position: absolute;
-            top: 0;
-            left: 0;
-            margin: 10px;
-        }
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 10px;
+}
 
     </style>
 </head>
@@ -247,58 +245,74 @@ input::placeholder {
             }
             switchScreen('conditions-screen', 'register-screen');
         }
-
+    
         document.getElementById('register-form').addEventListener('submit', function (e) {
             e.preventDefault();
-
+    
             // ดึงข้อมูลจากฟอร์ม
             const name = document.getElementById('name').value;
             const surname = document.getElementById('surname').value;
             const nationality = document.getElementById('nationality').value;
             const phone = document.getElementById('phone').value;
             const dob = document.getElementById('dob').value;
-
+    
+            // บันทึกข้อมูลใน localStorage
+            localStorage.setItem('name', name);
+            localStorage.setItem('surname', surname);
+            localStorage.setItem('nationality', nationality);
+            localStorage.setItem('phone', phone);
+            localStorage.setItem('dob', dob);
+    
             // แสดงข้อมูลในหน้าจอยืนยัน
             document.getElementById('confirm-name').textContent = name;
             document.getElementById('confirm-surname').textContent = surname;
             document.getElementById('confirm-nationality').textContent = nationality;
             document.getElementById('confirm-phone').textContent = phone;
             document.getElementById('confirm-dob').textContent = dob;
-
+    
             // เปลี่ยนหน้าจอ
             switchScreen('register-screen', 'confirmation-screen');
         });
-
+    
+        // ตรวจสอบว่าเคยลงทะเบียนแล้วหรือไม่เมื่อโหลดหน้าเว็บ
+        window.onload = function () {
+            if (localStorage.getItem('name') && localStorage.getItem('surname')) {
+                // ถ้ามีข้อมูลใน localStorage ให้แสดงข้อมูลในหน้าจอยืนยัน
+                document.getElementById('confirm-name').textContent = localStorage.getItem('name');
+                document.getElementById('confirm-surname').textContent = localStorage.getItem('surname');
+                document.getElementById('confirm-nationality').textContent = localStorage.getItem('nationality');
+                document.getElementById('confirm-phone').textContent = localStorage.getItem('phone');
+                document.getElementById('confirm-dob').textContent = localStorage.getItem('dob');
+    
+                // ซ่อนหน้าลงทะเบียน และแสดงหน้าจอยืนยัน
+                switchScreen('conditions-screen', 'confirmation-screen');
+            }
+        };
+    
         function switchScreen(hideId, showId) {
             document.getElementById(hideId).classList.remove('active');
             document.getElementById(hideId).style.display = 'none';
             document.getElementById(showId).classList.add('active');
             document.getElementById(showId).style.display = 'block';
         }
-
+    
         function startShooting() {
             window.location.href = 'page2-1.html';
         }
-
+    
         function editInformation() {
-            // ดึงข้อมูลจากหน้าจอยืนยันมาแสดงในฟอร์ม
-            const name = document.getElementById('confirm-name').textContent;
-            const surname = document.getElementById('confirm-surname').textContent;
-            const nationality = document.getElementById('confirm-nationality').textContent;
-            const phone = document.getElementById('confirm-phone').textContent;
-            const dob = document.getElementById('confirm-dob').textContent;
-
-            // แสดงข้อมูลในฟอร์มเพื่อให้สามารถแก้ไขได้
-            document.getElementById('name').value = name;
-            document.getElementById('surname').value = surname;
-            document.getElementById('nationality').value = nationality;
-            document.getElementById('phone').value = phone;
-            document.getElementById('dob').value = dob;
-
+            // ดึงข้อมูลจาก localStorage มาแสดงในฟอร์ม
+            document.getElementById('name').value = localStorage.getItem('name');
+            document.getElementById('surname').value = localStorage.getItem('surname');
+            document.getElementById('nationality').value = localStorage.getItem('nationality');
+            document.getElementById('phone').value = localStorage.getItem('phone');
+            document.getElementById('dob').value = localStorage.getItem('dob');
+    
             // เปลี่ยนหน้าจอไปยังหน้าลงทะเบียน
             switchScreen('confirmation-screen', 'register-screen');
         }
     </script>
+    
 </body>
 
 </html>
