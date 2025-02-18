@@ -24,7 +24,8 @@
             border-radius: 20px;
             text-align: center;
             width: 90%;
-            max-width: 400px; /* ปรับขนาด container สำหรับมือถือ */
+            max-width: 400px;
+            /* ปรับขนาด container สำหรับมือถือ */
             margin: 20px;
             box-sizing: border-box;
             box-shadow: none;
@@ -34,7 +35,8 @@
         h1 {
             font-family: 'Prompt', 'Sarabun', sans-serif;
             font-weight: bold;
-            font-size: 24px; /* ปรับขนาดฟอนต์ให้เล็กลง */
+            font-size: 28px;
+            /* ปรับให้ตัวอักษรใหญ่ขึ้น */
             color: #7c5ba6;
             margin-bottom: 20px;
             line-height: 1.6;
@@ -43,7 +45,8 @@
         }
 
         h2 {
-            font-size: 20px; /* ปรับขนาดฟอนต์ให้เหมาะสม */
+            font-size: 24px;
+            /* ปรับขนาดฟอนต์ให้เหมาะสม */
             color: #7c5ba6;
             margin-bottom: 20px;
         }
@@ -57,7 +60,8 @@
 
         ul li {
             margin: 10px 0;
-            font-size: 14px; /* ปรับขนาดฟอนต์ของรายการ */
+            font-size: 16px;
+            /* ปรับขนาดฟอนต์ของรายการ */
             color: #555555;
         }
 
@@ -65,7 +69,8 @@
             display: flex;
             align-items: center;
             justify-content: left;
-            font-size: 14px; /* ลดขนาดฟอนต์ */
+            font-size: 16px;
+            /* ลดขนาดฟอนต์ */
             color: #5A3D9A;
             margin-bottom: 5px;
             font-weight: bold;
@@ -89,7 +94,8 @@
             margin: 10px 0;
             border: 2px solid #7c5ba6;
             border-radius: 8px;
-            font-size: 14px; /* ลดขนาดฟอนต์ */
+            font-size: 16px;
+            /* ลดขนาดฟอนต์ */
             box-sizing: border-box;
             background-color: #f9f9f9;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -112,10 +118,12 @@
         .button {
             display: block;
             width: 100%;
-            max-width: 250px; /* ปรับขนาดปุ่ม */
+            max-width: 250px;
+            /* ปรับขนาดปุ่ม */
             margin: 10px auto;
             padding: 12px 20px;
-            font-size: 14px; /* ลดขนาดฟอนต์ของปุ่ม */
+            font-size: 16px;
+            /* ลดขนาดฟอนต์ของปุ่ม */
             font-weight: bold;
             text-align: center;
             color: #FFFFFF;
@@ -166,39 +174,40 @@
     </div>
 
     <!-- คอนเทนเนอร์เนื้อหา -->
-    <div class="container active" id="confirmation-screen">
-        <h2>คำแนะนำการใช้งาน</h2>
-        <div class="confirmation">
-            <ul>
-                <li><strong>1. เตรียมตัว</strong><br>
-                    - ใช้ถุงใต้ตาเป็นจุดสังเกต<br>
-                    - ควรใช้แสงสว่างเพียงพอ<br>
-                    - ทำความสะอาดรอบดวงตา<br>
-                    - ตรวจสอบให้ไม่มีสิ่งใดบังถุงใต้ตา
-                </li>
-                <li><strong>2. เมื่อเข้าสู่หน้าถ่ายรูป</strong><br>
-                    - ดึงเปลือกตาขวาลง<br>
-                    - เลื่อนตาและถุงใต้ตาให้อยู่ในกล้อง<br>
-                    - หากตาอยู่ในกล้องเเล้ว ก็สามารถกดถ่ายได้เลย<br>
-                    - กดถ่ายรูปเมื่อมั่นใจในตำแหน่ง
-                </li>
-            </ul>
+    <div class="container active" id="conditions-screen">
+        <div class="container active" id="confirmation-screen">
+            <h2>คำแนะนำการใช้งาน</h2>
+            <div class="confirmation">
+                <ul>
+                    <li><strong>1. เตรียมตัว</strong><br>
+                        - ใช้ถุงใต้ตาเป็นจุดสังเกต<br>
+                        - ควรใช้แสงสว่างเพียงพอ<br>
+                        - ทำความสะอาดรอบดวงตา<br>
+                        - ตรวจสอบให้ไม่มีสิ่งใดบังถุงใต้ตา
+                    </li>
+                    <li><strong>2. เมื่อเข้าสู่หน้าถ่ายรูป</strong><br>
+                        - ดึงเปลือกตาขวาลง<br>
+                        - เลื่อนตาและถุงใต้ตาให้อยู่ในกล้อง<br>
+                        - หากตาอยู่ในกล้องเเล้ว ก็สามารถกดถ่ายได้เลย<br>
+                        - กดถ่ายรูปเมื่อมั่นใจในตำแหน่ง
+                    </li>
+                </ul>
+            </div>
+            <button class="button" onclick="startShooting()">เริ่มการถ่ายภาพ</button>
         </div>
-        <button class="button" onclick="startShooting()">เริ่มการถ่ายภาพ</button>
-    </div>
 
-    <script>
-        function startShooting() {
-            // เปลี่ยนหน้าไปยัง 2.html
-            window.location.href = 'page3.html';
-        }
+        <script>
+            function startShooting() {
+                // เปลี่ยนหน้าไปยัง 2.html
+                window.location.href = 'page3.html';
+            }
 
-        // รอโหลดหน้าจอ
-        window.onload = function() {
-            // แสดงหน้าจอคำแนะนำเริ่มต้น
-            document.getElementById('confirmation-screen').classList.add('active');
-        }
-    </script>
+            // รอโหลดหน้าจอ
+            window.onload = function () {
+                // แสดงหน้าจอคำแนะนำเริ่มต้น
+                document.getElementById('confirmation-screen').classList.add('active');
+            }
+        </script>
 </body>
 
 </html>
