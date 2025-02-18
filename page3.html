@@ -1,19 +1,13 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ลงทะเบียนการใช้งาน</title>
+    <title>Eye Detection with Camera Controls</title>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
     <style>
-        /* สไตล์รูปภาพซ้ายบน */
-        .logo {
-            position: absolute;
-            top: 0;
-            left: 0;
-            margin: 10px;
-        }
-
         body {
             font-family: 'Arial', sans-serif;
             background: #faf8f8;
@@ -25,168 +19,249 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            box-sizing: border-box;
         }
 
-        .button-back-top-right {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 720px;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
         }
 
-        h1, h2 {
-            font-size: 29px;
-            color: #7c5ba6;
-            margin-bottom: 20px;
+        .main-canvas {
+            border-radius: 10px;
+            max-width: 100%;
+            max-height: 400px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            margin: 15px 0;
         }
 
-        form {
-            text-align: left;
-            margin: 0 auto;
-            max-width: 80%;
-            width: 100%;
+        .camera-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
         }
 
-        label {
-            display: block;
-            margin: 10px 0 5px;
-            font-weight: bold;
-            color: #7c5ba6;
-            font-size: 21px;
-        }
-
-        input[type="text"], input[type="tel"], input[type="date"] {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            border: 2px solid #7c5ba6;
-            border-radius: 8px;
-            font-size: 18px;
-            box-sizing: border-box;
-            background-color: #f9f9f9;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        input[type="text"]:focus, input[type="tel"]:focus, input[type="date"]:focus {
-            border-color: #f5b62a;
-            box-shadow: 0 0 5px rgba(245, 130, 32, 0.7);
-            outline: none;
-        }
-
-        button, .button-next {
+        .camera-btn {
             background-color: #f5b62a;
             color: white;
-            padding: 10px 15px;
+            padding: 8px 15px;
             border: none;
-            border-radius: 20px;
+            border-radius: 5px;
             cursor: pointer;
-            text-decoration: none;
-            margin-top: 20px;
-            font-size: 16px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            width: 100%;
-            box-sizing: border-box;
+            transition: background-color 0.3s ease;
         }
 
-        button:hover, .button-next:hover {
+        .camera-btn:hover {
             background-color: #f07325;
         }
 
-        .confirmation {
-            text-align: left;
-            margin-top: 20px;
+        .xx {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 10px;
         }
 
-        ul {
-            text-align: left;
-            margin: 15px 0;
-            padding-left: 10px;
-            font-size: 16px;
+        h1 {
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-size: 24px;
+            color: #5A3D9A;
+            margin-bottom: 20px;
         }
 
-        ul li {
-            margin: 10px 0;
-            color: #555555;
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .main-canvas {
+                max-height: 250px;
+            }
+
+            .camera-btn {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
         }
+
+        /* Very small screen */
+        @media (max-width: 480px) {
+            .container {
+                padding: 8px;
+                width: 100%;
+            }
+
+            h1 {
+                font-size: 18px;
+            }
+
+            .main-canvas {
+                max-height: 200px;
+            }
+
+            .camera-btn {
+                padding: 5px 10px;
+                font-size: 12px;
+            }
+        }
+
     </style>
 </head>
 
 <body>
-    <!-- รูปภาพซ้ายบน -->
-    <div class="logo">
-        <img src="03.png" alt="ป้าย" style="width: 150px; height: auto;">
-    </div>
-    <a href="index1.html" class="button-back-top-right">
-        <img src="2.png" alt="ย้อนกลับ" style="width: 50px; height: auto;"></a>
-
-    <div class="container" id="registration-screen">
-        <h1>เข้าสู่ระบบ</h1>
-        <form id="register-form">
-            <label for="name">ชื่อ</label>
-            <input type="text" id="name" placeholder="ใส่ชื่อ" required>
-
-            <label for="lastname">นามสกุล</label>
-            <input type="text" id="lastname" placeholder="ใส่นามสกุล" required>
-
-            <label for="phone">เบอร์โทรศัพท์</label>
-            <input type="tel" id="phone" placeholder="ใส่เบอร์โทรศัพท์" required>
-
-            <button type="submit">ยืนยันการเข้าสู่ระบบ</button>
-        </form>
-    </div>
-
-    <div class="container confirmation-screen" id="confirmation-screen" style="display: none;">
-        <h2>คำแนะนำการใช้งาน</h2>
-        <div class="confirmation">
-            <ul>
-                <li>
-                    <strong>1. เตรียมตัว</strong><br>
-                    - ใช้ถุงใต้ตาเป็นจุดสังเกต<br>
-                    - ควรใช้แสงสว่างเพียงพอ<br>
-                    - ทำความสะอาดรอบดวงตา<br>
-                    - ตรวจสอบให้ไม่มีสิ่งใดบังถุงใต้ตา
-                </li>
-                <li>
-                    <strong>2. เมื่อเข้าสู่หน้าถ่ายรูป</strong><br>
-                    - ดึงเปลือกตาขวาลง<br>
-                    - เลื่อนตาและถุงใต้ตาให้อยู่ในวงกลม<br>
-                    - หากตาอยู่ในกรอบของกล้อง<br>
-                    - กดถ่ายรูปเมื่อมั่นใจในตำแหน่ง
-                </li>
-            </ul>
+    <a class="xx">
+        <img src="03.png" alt="ป้าย" style="width: 150px; height: 70px;">
+    </a>
+    <div class="container">
+        <h1>ถ่ายภาพเพื่อวิเคราะห์</h1>
+        <div class="camera-controls">
+            <button id="flipCamera" class="camera-btn">สลับกล้อง</button>
         </div>
-        <button class="button-next" onclick="startShooting()">เริ่มการถ่ายภาพ</button>
+        <video id="video" autoplay playsinline style="display: none;"></video>
+        <canvas id="outputCanvas" class="main-canvas"></canvas>
+        <button id="captureButton" class="camera-btn">📸 ถ่ายภาพ</button>
     </div>
 
     <script>
-        document.getElementById('register-form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            const lastname = document.getElementById('lastname').value;
-            const phone = document.getElementById('phone').value;
-            
-            localStorage.setItem('name', name);
-            localStorage.setItem('lastname', lastname);
-            localStorage.setItem('phone', phone);
+        const videoElement = document.getElementById('video');
+        const canvasElement = document.getElementById('outputCanvas');
+        const canvasCtx = canvasElement.getContext('2d');
+        let faceMesh;
+        let currentLandmarks = null;
+        let currentCamera = 'user';
+        let rotation = 0;
+        let camera;
 
-            document.getElementById('registration-screen').style.display = 'none';
-            document.getElementById('confirmation-screen').style.display = 'block';
+        // เริ่มกล้อง
+        async function startCamera() {
+            try {
+                if (videoElement.srcObject) {
+                    videoElement.srcObject.getTracks().forEach(track => track.stop());
+                }
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: currentCamera }
+                });
+                videoElement.srcObject = stream;
+                await videoElement.play();
+
+                if (!faceMesh) {
+                    faceMesh = new FaceMesh({
+                        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`,
+                    });
+                    faceMesh.setOptions({
+                        maxNumFaces: 1,
+                        refineLandmarks: true,
+                        minDetectionConfidence: 0.5,
+                        minTrackingConfidence: 0.5,
+                    });
+                    faceMesh.onResults(onResults);
+                }
+
+                if (camera) {
+                    camera.stop();
+                }
+                camera = new Camera(videoElement, {
+                    onFrame: async () => {
+                        await faceMesh.send({ image: videoElement });
+                    },
+                    width: 640,
+                    height: 480,
+                });
+                camera.start();
+            } catch (err) {
+                console.error('Error starting camera:', err);
+                alert('ไม่สามารถเปิดกล้องได้ กรุณาตรวจสอบการอนุญาตการใช้กล้อง');
+            }
+        }
+
+        // ฟังก์ชันสลับกล้อง
+        function switchCamera() {
+            currentCamera = currentCamera === 'user' ? 'environment' : 'user';
+            startCamera();
+        }
+
+        function onResults(results) {
+            canvasElement.width = videoElement.videoWidth;
+            canvasElement.height = videoElement.videoHeight;
+
+            canvasCtx.save();
+            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+            canvasCtx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+
+            if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
+                currentLandmarks = results.multiFaceLandmarks[0];
+            }
+
+            canvasCtx.restore();
+        }
+
+        document.getElementById('flipCamera').addEventListener('click', switchCamera);
+
+        // ฟังก์ชันถ่ายภาพและบันทึก
+        document.getElementById('captureButton').addEventListener('click', () => {
+            if (!currentLandmarks) return;
+
+            const leftEyeIndices = [33, 160, 158, 133, 153, 144];
+            const rightEyeIndices = [362, 385, 387, 263, 373, 380];
+            const scaleFactor = 2.5;
+
+            function captureEyeRegion(landmarks, indices, scaleFactor) {
+                const xCoords = indices.map((idx) => landmarks[idx].x * canvasElement.width);
+                const yCoords = indices.map((idx) => landmarks[idx].y * canvasElement.height);
+
+                const xMin = Math.min(...xCoords);
+                const xMax = Math.max(...xCoords);
+                const yMin = Math.min(...yCoords);
+                const yMax = Math.max(...yCoords);
+
+                const width = xMax - xMin;
+                const height = yMax - yMin;
+                const size = Math.max(width, height) * scaleFactor;
+
+                const centerX = (xMin + xMax) / 2;
+                const centerY = (yMin + yMax) / 2;
+
+                return { x: centerX - size / 2, y: centerY - size / 2, size: size };
+            }
+
+            const leftRegion = captureEyeRegion(currentLandmarks, leftEyeIndices, scaleFactor);
+            const rightRegion = captureEyeRegion(currentLandmarks, rightEyeIndices, scaleFactor);
+
+            function storeCapturedImages(leftRegion, rightRegion) {
+                const leftCanvas = document.createElement('canvas');
+                const rightCanvas = document.createElement('canvas');
+                leftCanvas.width = rightCanvas.width = leftRegion.size;
+                leftCanvas.height = rightCanvas.height = rightRegion.size;
+
+                const leftCtx = leftCanvas.getContext('2d');
+                const rightCtx = rightCanvas.getContext('2d');
+
+                leftCtx.drawImage(canvasElement, leftRegion.x, leftRegion.y, leftRegion.size, leftRegion.size, 0, 0, leftRegion.size, leftRegion.size);
+                rightCtx.drawImage(canvasElement, rightRegion.x, rightRegion.y, rightRegion.size, rightRegion.size, 0, 0, rightRegion.size, rightRegion.size);
+
+                localStorage.setItem('leftEyeImage', leftCanvas.toDataURL('image/png'));
+                localStorage.setItem('rightEyeImage', rightCanvas.toDataURL('image/png'));
+
+                window.location.href = "page4.html";
+            }
+
+            storeCapturedImages(leftRegion, rightRegion);
         });
 
-        window.onload = function () {
-            const storedPhone = localStorage.getItem('phone');
-            if (storedPhone) {
-                document.getElementById('registration-screen').style.display = 'none';
-                document.getElementById('confirmation-screen').style.display = 'block';
-            }
-        };
-
-        function startShooting() {
-            window.location.href = 'page4.html';
-        }
+        startCamera();
     </script>
 </body>
 
