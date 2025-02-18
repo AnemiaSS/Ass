@@ -35,13 +35,13 @@
         h1 {
             text-align: center;
             color: #7c5ba6;
-            font-size: 22px;
+            font-size: 26px; /* ขนาดฟอนต์เพิ่มขึ้น */
         }
 
         label {
             font-weight: bold;
             color: #7c5ba6;
-            font-size: 14px;
+            font-size: 16px; /* ขนาดฟอนต์เพิ่มขึ้น */
         }
 
         input, select {
@@ -50,14 +50,14 @@
             margin: 5px 0 15px;
             border: 2px solid #7c5ba6;
             border-radius: 5px;
-            font-size: 16px;
+            font-size: 18px; /* ขนาดฟอนต์เพิ่มขึ้น */
             outline: none;
         }
 
         button {
             width: 100%;
             padding: 12px;
-            font-size: 16px;
+            font-size: 18px; /* ขนาดฟอนต์เพิ่มขึ้น */
             font-weight: bold;
             background: #f5b62a;
             color: white;
@@ -95,7 +95,7 @@
         .switch-text {
             text-align: center;
             color: #555;
-            font-size: 14px;
+            font-size: 16px; /* ขนาดฟอนต์เพิ่มขึ้น */
             margin-top: 10px;
         }
 
@@ -117,11 +117,11 @@
             }
 
             h1 {
-                font-size: 18px;
+                font-size: 20px;
             }
 
             label, input, select, button {
-                font-size: 14px;
+                font-size: 16px;
             }
 
             button {
@@ -152,11 +152,18 @@
             margin: 10px;
         }
 
+         /* รูปภาพตำแหน่งเหนือหัวข้อ */
+         img {
+            width: 100%; /* ปรับขนาดรูปภาพให้พอดีกับหน้าจอมือถือ */
+            max-width: 350px;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+        }
     </style>
 </head>
 
 <body>
-
     <div class="container" id="login-container">
         <img src="03.png" alt="ป้าย" />
         <h1>เข้าสู่ระบบ</h1>
