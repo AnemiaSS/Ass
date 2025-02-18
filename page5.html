@@ -1,134 +1,161 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>กำลังดำเนินการ</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <title>ผลการตรวจเลือด</title>
     <style>
-       /* General body styling */
-       body {
+        /* สไตล์รูปภาพซ้ายบน */
+        .logo {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            margin: 10px;
+        }
+
+        /* General body styling */
+        body {
             font-family: 'Arial', sans-serif;
             background: #faf8f8;
-            text-align: center;
             margin: 0;
             padding: 0;
-            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100vh;
             flex-direction: column;
         }
 
         .container {
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
             text-align: center;
-            max-width: 400px;
-            width: 100%;
+            max-width: 90%;
+            width: 400px;
         }
 
-        .message {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-            margin: 0;
+        h1,h2 {
+            color: #388e3c;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+        /* Back button */
+        .button-back-top-right {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .loading {
-            margin-top: 20px;
-            font-size: 18px;
+        /* Style for images container */
+        #images-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        /* Style for consistent image sizes */
+        #images-container img {
+            width: 160px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        #images-container h2 {
+            font-size: 14px;
             color: #555;
         }
 
-        /* Image Classifier Styles */
-        #imagePreview {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px dashed #ccc;
-            text-align: center;
-            font-size: 14px;
-            color: #666;
-            height: 150px;
+        /* เพิ่ม media query สำหรับหน้าจอขนาดเล็ก */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            h2 {
+                font-size: 16px;
+            }
+
+            /* ปรับขนาดภาพให้เล็กลงบนหน้าจอมือถือ */
+            #images-container img {
+                width: 150px;
+                height: 150px;
+            }
+
+            .container {
+                padding: 12px;
+                width: 85%;
+            }
         }
 
-        #result {
-            margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
+        @media (max-width: 480px) {
+            .logo img {
+                width: 100px;
+                height: auto;
+            }
+
+            .button-back-top-right img {
+                width: 40px;
+                height: 35px;
+            }
         }
     </style>
 </head>
 
 <body>
+    <a class="logo">
+        <img src="03.png" alt="ป้าย" style="width: 150px; height: auto;">
+    </a>
+
+    <!-- Back Button -->
+    <a href="page4.html" class="button-back-top-right">
+        <img src="2.png" alt="ย้อนกลับ" style="width: 50px; height: auto;">
+    </a>
+
+    <!-- Main content -->
     <div class="container">
-        <p class="message">กำลังทำการวิเคราะห์ผลเลือด</p>
-        <p class="loading">กรุณารอสักครู่...</p>
-        <img id="imagePreview" style="width: 200px; height: auto; display: none;">
-        <p id="result"></p>
-    </div>
+        <h1>วิเคราะห์ผลเลือดเสร็จสมบูรณ์</h1>
+        <h2>ท่านไม่มีความเสี่ยงต่อภาวะโลหิตจาง</h2>
 
-    <script>
-        let model;
+        <div id="images-container">
+            <!-- Image สำหรับตาซ้าย -->
+            <div>
+                <h2>ตาซ้าย</h2>
+                <img id="leftEyeImage" alt="ไม่พบตาซ้าย">
+            </div>
+            <!-- Image สำหรับตาขวา -->
+            <div>
+                <h2>ตาขวา</h2>
+                <img id="rightEyeImage" alt="ไม่พบตาขวา">
+            </div>
+        </div>
+        <p><strong>จากผลการตรวจวิเคราะห์</strong></p>
+        <p>พบว่าค่าความสมบูรณ์ ของเม็ดเลือดของท่านอยู่ในเกณฑ์มาตราฐาน </p>
 
-        // ✅ โหลดโมเดล TensorFlow.js
-        async function loadModel() {
-            model = await tf.loadLayersModel("model.json");  // โหลดโมเดลจากไฟล์ model.json
-            document.querySelector(".loading").innerText = "โมเดลโหลดสำเร็จ! กำลังประมวลผล...";
-            classifyImage();
-        }
+        <!-- Load images from localStorage -->
+        <script>
+            const rightImageData = localStorage.getItem('rightEyeImage');
+            const leftImageData = localStorage.getItem('leftEyeImage');
 
-        // ✅ ใช้โมเดลทำการพยากรณ์ (ทำนาย)
-        async function classifyImage() {
-            const imgElement = document.getElementById("imagePreview");
-            imgElement.src = localStorage.getItem("eyeImage");
-            imgElement.style.display = "block"; // แสดงภาพที่ถูกโหลด
-
-            const tensor = tf.browser.fromPixels(imgElement)
-                .resizeNearestNeighbor([224, 224])  // ปรับขนาดภาพให้เข้ากับโมเดล
-                .toFloat()
-                .expandDims();
-
-            const predictions = model.predict(tensor);
-            const results = await predictions.data(); // ดึงค่าผลลัพธ์ออกมาเป็น array
-
-            const labels = ["โลหิตจาง", "ไม่มีความเสี่ยง"]; // ค่าป้ายกำกับของโมเดล
-            const maxIndex = results.indexOf(Math.max(...results)); // หาค่าที่มีโอกาสสูงสุด
-            document.getElementById("result").innerText = `ผลลัพธ์: ${labels[maxIndex]}`;
-
-            // ✅ เปลี่ยนหน้าเว็บตามผลลัพธ์ (รอ 2 วินาที)
-            setTimeout(() => {
-                window.location.href = (maxIndex === 0) ? "page7.html" : "page6.html";
-            }, 2000); // 2 วินาที
-        }
-
-        // ✅ โหลดภาพจาก localStorage แล้วรันโมเดล
-        document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById("imagePreview").src = localStorage.getItem("eyeImage");
-            loadModel();
-        });
-
-        // 🔹 ฟังก์ชันเดิมที่ใช้สุ่มผลลัพธ์ (ยังคงไว้)
-        const riskDetected = Math.random() > 0.5; // 50% chance of detecting risk
-        setTimeout(function () {
-            if (riskDetected) {
-                window.location.href = "page6.html"; // Redirect to page6.html if risk is detected
+            if (rightImageData) {
+                document.getElementById('rightEyeImage').src = rightImageData;
             } else {
-                window.location.href = "page7.html"; // Redirect to page7.html if no risk is detected
+                document.getElementById('rightEyeImage').alt = "ไม่พบภาพตาขวา";
             }
-        }, 2000); // 2 วินาที (แต่ไม่ถูกใช้จริง)
-    </script>
+
+            if (leftImageData) {
+                document.getElementById('leftEyeImage').src = leftImageData;
+            } else {
+                document.getElementById('leftEyeImage').alt = "ไม่พบภาพตาซ้าย";
+            }
+        </script>
+    </div>
 </body>
+
 </html>
