@@ -87,7 +87,7 @@
         <div class="camera-controls">
             <button id="flipCamera" class="camera-btn">สลับกล้อง</button>
         </div>
-        <video id="video" autoplay playsinline style="display: none;"></video>
+        <video id="video" autoplay playsinline></video>
         <canvas id="outputCanvas" class="main-canvas"></canvas>
         <button id="captureButton" class="camera-btn">📸 ถ่ายภาพ</button>
     </div>
@@ -162,6 +162,7 @@
             localStorage.setItem('capturedImage', dataUrl);
             window.location.href = "page5.html";
         });
+        
         startCamera();
     </script>
 </body>
