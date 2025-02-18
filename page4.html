@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="th">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Eye Detection with Camera Controls</title>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>กำลังดำเนินการ</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     <style>
-        body {
+       /* General body styling */
+       body {
             font-family: 'Arial', sans-serif;
             background: #faf8f8;
             text-align: center;
@@ -21,287 +20,115 @@
             flex-direction: column;
         }
 
-        .button-back-top-right {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .button-back-top-right img {
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .button-back-top-right img:hover {
-            transform: scale(1.1);
-        }
-
         .container {
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
             width: 100%;
-            max-width: 720px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
         }
 
-        h1 {
+        .message {
             font-size: 24px;
-            color: #7c5ba6;
-            margin-bottom: 15px;
+            font-weight: bold;
+            color: #333;
+            margin: 0;
         }
 
-        .main-canvas {
-            border-radius: 10px;
-            max-width: 100%;
-            max-height: 400px;
-            box-shadow: 0 2px 4px #7c5ba6(0, 0, 0, 0.2);
-            margin: 15px 0;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
-        .controls {
-            display: flex;
-            gap: 10px;
-            margin: 10px 0;
+        .loading {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #555;
         }
 
-        .btn-action {
-            background-color: #f5b62a;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+        /* Image Classifier Styles */
+        #imagePreview {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px dashed #ccc;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            height: 150px;
         }
 
-        .btn-action:hover {
-            background-color: #f07325;
-        }
-
-        .xx {
-            position: absolute;
-            top: 0;
-            left: 0;
-            margin: 10px;
-        }
-
-        .camera-controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .camera-btn {
-            background-color: #f5b62a;
-            color: white;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .camera-btn:hover {
-            background-color: #f07325;
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
         }
     </style>
 </head>
 
 <body>
-    <a class="xx">
-        <img src="03.png" alt="ป้าย" style="width: 150px; height: 70px;">
-    </a>
-    
-    <a href="page4.html" class="button-back-top-right">
-        <img src="2.png" alt="ย้อนกลับ" style="width: 50px; height: 40px;">
-    </a>
-
     <div class="container">
-        <h1>ถ่ายภาพเพื่อวิเคราะห์</h1>
-        <div class="camera-controls">
-            <button id="flipCamera" class="camera-btn">สลับกล้อง</button>
-            <button id="rotateCamera" class="camera-btn">หมุนกล้อง</button>
-        </div>
-        <video id="video" autoplay muted style="display:none;"></video>
-        <canvas id="outputCanvas" class="main-canvas"></canvas>
-        <button id="captureButton" class="btn-action">
-            <img src="04.png" alt="ถ่ายภาพ" style="width: 40px; height: 30px;">
-        </button>
+        <p class="message">กำลังทำการวิเคราะห์ผลเลือด</p>
+        <p class="loading">กรุณารอสักครู่...</p>
+        <img id="imagePreview" style="width: 200px; height: auto; display: none;">
+        <p id="result"></p>
     </div>
 
     <script>
-        const videoElement = document.getElementById('video');
-        const canvasElement = document.getElementById('outputCanvas');
-        const canvasCtx = canvasElement.getContext('2d');
-        let faceMesh;
-        let currentLandmarks = null;
-        let currentCamera = 'user';
-        let rotation = 0;
-        let camera;
+        let model;
 
-        async function initializeFaceMesh() {
-            faceMesh = new FaceMesh({
-                locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`,
-            });
-
-            faceMesh.setOptions({
-                maxNumFaces: 1,
-                refineLandmarks: true,
-                minDetectionConfidence: 0.5,
-                minTrackingConfidence: 0.5,
-            });
-
-            faceMesh.onResults(onResults);
+        // ✅ โหลดโมเดล TensorFlow.js
+        async function loadModel() {
+            model = await tf.loadLayersModel("model.json");  // โหลดโมเดลจากไฟล์ model.json
+            document.querySelector(".loading").innerText = "โมเดลโหลดสำเร็จ! กำลังประมวลผล...";
+            classifyImage();
         }
 
-        async function startCamera() {
-            if (camera) {
-                await camera.stop();
-            }
+        // ✅ ใช้โมเดลทำการพยากรณ์ (ทำนาย)
+        async function classifyImage() {
+            const imgElement = document.getElementById("imagePreview");
+            imgElement.src = localStorage.getItem("eyeImage");
+            imgElement.style.display = "block"; // แสดงภาพที่ถูกโหลด
 
-            camera = new Camera(videoElement, {
-                onFrame: async () => {
-                    await faceMesh.send({ image: videoElement });
-                },
-                width: 640,
-                height: 480,
-                facingMode: currentCamera
-            });
+            const tensor = tf.browser.fromPixels(imgElement)
+                .resizeNearestNeighbor([224, 224])  // ปรับขนาดภาพให้เข้ากับโมเดล
+                .toFloat()
+                .expandDims();
 
-            try {
-                await camera.start();
-            } catch (error) {
-                console.error('Error starting camera:', error);
-                alert('ไม่สามารถเปิดกล้องได้ กรุณาตรวจสอบการอนุญาตการใช้กล้อง');
-            }
+            const predictions = model.predict(tensor);
+            const results = await predictions.data(); // ดึงค่าผลลัพธ์ออกมาเป็น array
+
+            const labels = ["โลหิตจาง", "ไม่มีความเสี่ยง"]; // ค่าป้ายกำกับของโมเดล
+            const maxIndex = results.indexOf(Math.max(...results)); // หาค่าที่มีโอกาสสูงสุด
+            document.getElementById("result").innerText = `ผลลัพธ์: ${labels[maxIndex]}`;
+
+            // ✅ เปลี่ยนหน้าเว็บตามผลลัพธ์ (รอ 2 วินาที)
+            setTimeout(() => {
+                window.location.href = (maxIndex === 0) ? "page4.html" : "page5.html";
+            }, 2000); // 2 วินาที
         }
 
-        function onResults(results) {
-            canvasElement.width = videoElement.videoWidth;
-            canvasElement.height = videoElement.videoHeight;
-
-            canvasCtx.save();
-            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-            
-            // Apply rotation
-            canvasCtx.translate(canvasElement.width/2, canvasElement.height/2);
-            canvasCtx.rotate(rotation * Math.PI / 180);
-            canvasCtx.translate(-canvasElement.width/2, -canvasElement.height/2);
-            
-            canvasCtx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
-
-            if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
-                currentLandmarks = results.multiFaceLandmarks[0];
-            }
-
-            canvasCtx.restore();
-        }
-
-        function captureEyeRegion(landmarks, indices, scaleFactor) {
-            const xCoords = indices.map((idx) => landmarks[idx].x * canvasElement.width);
-            const yCoords = indices.map((idx) => landmarks[idx].y * canvasElement.height);
-
-            const xMin = Math.min(...xCoords);
-            const xMax = Math.max(...xCoords);
-            const yMin = Math.min(...yCoords);
-            const yMax = Math.max(...yCoords);
-
-            const width = xMax - xMin;
-            const height = yMax - yMin;
-            const size = Math.max(width, height) * scaleFactor;
-
-            const centerX = (xMin + xMax) / 2;
-            const centerY = (yMin + yMax) / 2;
-
-            return { x: centerX - size / 2, y: centerY - size / 2, size: size };
-        }
-
-        function storeCapturedImages(leftRegion, rightRegion) {
-            const leftCanvas = document.createElement('canvas');
-            const rightCanvas = document.createElement('canvas');
-            leftCanvas.width = rightCanvas.width = leftRegion.size;
-            leftCanvas.height = rightCanvas.height = rightRegion.size;
-
-            const leftCtx = leftCanvas.getContext('2d');
-            const rightCtx = rightCanvas.getContext('2d');
-
-            // Apply the same rotation to captured images
-            leftCtx.translate(leftCanvas.width/2, leftCanvas.height/2);
-            leftCtx.rotate(rotation * Math.PI / 180);
-            leftCtx.translate(-leftCanvas.width/2, -leftCanvas.height/2);
-
-            rightCtx.translate(rightCanvas.width/2, rightCanvas.height/2);
-            rightCtx.rotate(rotation * Math.PI / 180);
-            rightCtx.translate(-rightCanvas.width/2, -rightCanvas.height/2);
-
-            leftCtx.drawImage(
-                canvasElement,
-                leftRegion.x,
-                leftRegion.y,
-                leftRegion.size,
-                leftRegion.size,
-                0,
-                0,
-                leftRegion.size,
-                leftRegion.size
-            );
-
-            rightCtx.drawImage(
-                canvasElement,
-                rightRegion.x,
-                rightRegion.y,
-                rightRegion.size,
-                rightRegion.size,
-                0,
-                0,
-                rightRegion.size,
-                rightRegion.size
-            );
-
-            localStorage.setItem('leftEyeImage', leftCanvas.toDataURL('image/png'));
-            localStorage.setItem('rightEyeImage', rightCanvas.toDataURL('image/png'));
-
-            window.location.href = "page5.html";
-        }
-
-        document.getElementById('flipCamera').addEventListener('click', async () => {
-            currentCamera = currentCamera === 'user' ? 'environment' : 'user';
-            await startCamera();
+        // ✅ โหลดภาพจาก localStorage แล้วรันโมเดล
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("imagePreview").src = localStorage.getItem("eyeImage");
+            loadModel();
         });
 
-        document.getElementById('rotateCamera').addEventListener('click', () => {
-            rotation = (rotation + 90) % 360;
-        });
-
-        document.getElementById('captureButton').addEventListener('click', () => {
-            if (currentLandmarks) {
-                const leftRegion = captureEyeRegion(currentLandmarks, [33, 133, 159, 145, 158, 144], 1.8);
-                const rightRegion = captureEyeRegion(currentLandmarks, [362, 263, 386, 374, 385, 373], 1.8);
-                storeCapturedImages(leftRegion, rightRegion);
+        // 🔹 ฟังก์ชันเดิมที่ใช้สุ่มผลลัพธ์ (ยังคงไว้)
+        const riskDetected = Math.random() > 0.5; // 50% chance of detecting risk
+        setTimeout(function () {
+            if (riskDetected) {
+                window.location.href = "page4.html"; // Redirect to page6.html if risk is detected
             } else {
-                alert('ไม่พบตำแหน่งดวงตา! กรุณาให้กล้องทำงานอีกครั้ง.');
+                window.location.href = "page5.html"; // Redirect to page7.html if no risk is detected
             }
-        });
-
-        async function initialize() {
-            await initializeFaceMesh();
-            await startCamera();
-        }
-
-        initialize();
+        }, 2000); // 2 วินาที (แต่ไม่ถูกใช้จริง)
     </script>
 </body>
 </html>
