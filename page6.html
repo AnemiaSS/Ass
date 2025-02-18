@@ -23,24 +23,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            flex-direction: column;
+            min-height: 100vh;
         }
 
-        .container {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            max-width: 90%;
-            width: 400px;
-        }
-
-        h1,h2 {
-            color: #388e3c;
-        }
-
-        /* Back button */
+        /* Back Button */
         .button-back-top-right {
             position: absolute;
             top: 20px;
@@ -50,29 +36,46 @@
             justify-content: center;
         }
 
-        /* Style for images container */
-        #images-container {
-            display: flex;
-            justify-content: space-around;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin: 15px 0;
+        /* Main content */
+        .container {
+            padding: 15px;
+            max-width: 90%; /* ปรับขนาดให้เหมาะกับหน้าจอมือถือ */
+            width: 400px;
+            text-align: center;
+            margin: 20px;
         }
 
-        /* Style for consistent image sizes */
+        /* Section Styling */
+        h1, h2 {
+            color: #fe1b1b;
+        }
+
+        #images-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap; /* รองรับการจัดภาพในหน้าจอเล็ก */
+        }
+
+        #images-container div {
+            text-align: center;
+            flex-basis: 45%; /* ทำให้แต่ละ div มีพื้นที่ที่พอเหมาะ */
+        }
+
         #images-container img {
-            width: 160px;
-            height: 160px;
+            width: 150px; /* ปรับขนาดภาพให้เล็กลง */
+            height: 150px;
             object-fit: cover;
             border-radius: 8px;
         }
 
-        #images-container h2 {
-            font-size: 14px;
+        #images-container h3 {
+            font-size: 12px;
             color: #555;
         }
 
-        /* เพิ่ม media query สำหรับหน้าจอขนาดเล็ก */
+        /* เพิ่ม media query สำหรับอุปกรณ์ที่มีขนาดหน้าจอเล็ก */
         @media (max-width: 768px) {
             h1 {
                 font-size: 20px;
@@ -82,9 +85,8 @@
                 font-size: 16px;
             }
 
-            /* ปรับขนาดภาพให้เล็กลงบนหน้าจอมือถือ */
             #images-container img {
-                width: 150px;
+                width: 150px; /* ลดขนาดภาพเมื่อหน้าจอเล็กลง */
                 height: 150px;
             }
 
@@ -121,22 +123,24 @@
     <!-- Main content -->
     <div class="container">
         <h1>วิเคราะห์ผลเลือดเสร็จสมบูรณ์</h1>
-        <h2>ท่านไม่มีความเสี่ยงต่อภาวะโลหิตจาง</h2>
-
+        <h2>ท่านมีความเสี่ยงต่อภาวะโลหิตจาง</h2>
+       
         <div id="images-container">
             <!-- Image สำหรับตาซ้าย -->
             <div>
-                <h2>ตาซ้าย</h2>
+                <h3>ตาซ้าย</h3>
                 <img id="leftEyeImage" alt="ไม่พบตาซ้าย">
             </div>
             <!-- Image สำหรับตาขวา -->
             <div>
-                <h2>ตาขวา</h2>
+                <h3>ตาขวา</h3>
                 <img id="rightEyeImage" alt="ไม่พบตาขวา">
             </div>
         </div>
+
         <p><strong>จากผลการตรวจวิเคราะห์</strong></p>
-        <p>พบว่าค่าความสมบูรณ์ ของเม็ดเลือดของท่านอยู่ในเกณฑ์มาตราฐาน </p>
+        <p>พบว่าค่าความสมบูรณ์ ของเม็ดเลือดของท่านอยู่ในเกณฑ์ต่ำกว่ามาตราฐาน </p>
+        <p>คำแนะนำ: ควรรีบพบเเพทย์ผู้เชี่ยวชาญเพื่อทำการตรวจอย่างละเอียด</p>
 
         <!-- Load images from localStorage -->
         <script>
