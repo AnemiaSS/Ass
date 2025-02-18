@@ -108,7 +108,7 @@
         <div class="controls">
             <button id="flipCamera" class="btn-action">สลับกล้อง</button>
         </div>
-        <video id="video" autoplay muted style="display:none;"></video>
+        <video id="video" autoplay muted></video>
         <canvas id="outputCanvas" class="main-canvas"></canvas>
         <button id="captureButton" class="btn-action">
             <img src="04.png" alt="ถ่ายภาพ" style="width: 40px; height: auto;">
@@ -116,13 +116,14 @@
     </div>
 
     <script>
-        const videoElement = document.getElementById('video');
-        const canvasElement = document.getElementById('outputCanvas');
-        const canvasCtx = canvasElement.getContext('2d');
         let faceMesh;
         let currentLandmarks = null;
         let currentCamera = 'user';
         let camera;
+        let rotation = 0;
+        const videoElement = document.getElementById('video');
+        const canvasElement = document.getElementById('outputCanvas');
+        const canvasCtx = canvasElement.getContext('2d');
 
         async function initializeFaceMesh() {
             faceMesh = new FaceMesh({
@@ -167,23 +168,16 @@
 
             canvasCtx.save();
             canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-
-            // Flip canvas horizontally for mirror effect
-            canvasCtx.translate(canvasElement.width, 0);
-            canvasCtx.scale(-1, 1);
-
+            canvasCtx.translate(canvasElement.width / 2, canvasElement.height / 2);
+            canvasCtx.rotate(rotation * Math.PI / 180);
+            canvasCtx.translate(-canvasElement.width / 2, -canvasElement.height / 2);
             canvasCtx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
-
-            if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
-                currentLandmarks = results.multiFaceLandmarks[0];
-            }
-
             canvasCtx.restore();
         }
 
-        document.getElementById('flipCamera').addEventListener('click', () => {
+        document.getElementById('flipCamera').addEventListener('click', async () => {
             currentCamera = currentCamera === 'user' ? 'environment' : 'user';
-            startCamera();
+            await startCamera();
         });
 
         document.getElementById('captureButton').addEventListener('click', () => {
@@ -206,4 +200,3 @@
 </body>
 
 </html>
-
