@@ -4,132 +4,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ลงทะเบียนการใช้งาน</title>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&family=Sarabun:wght@400;700&display=swap"
-        rel="stylesheet">
+    <title>เข้าสู่ระบบ / ลงทะเบียน</title>
     <style>
-        /* สไตล์รูปภาพซ้ายบน */
-        .logo {
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f4f4f4;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        h1 {
+            text-align: center;
+            color: #7c5ba6;
+            font-size: 22px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #7c5ba6;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0 15px;
+            border: 2px solid #7c5ba6;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            background: #f5b62a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #f07325;
+        }
+
+        #register-container {
+            display: none;
+        }
+
+        .purple-bar {
+            width: 100%;
+            height: 60px;
+            background-color: #5A3D9A;
+            position: fixed;
+            left: 0;
+            z-index: 10;
+        }
+
+        .purple-bar.top {
+            top: 0;
+        }
+
+        .purple-bar.bottom {
+            bottom: 0;
+        }
+
+        .switch-text {
+            text-align: center;
+            color: #555;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .switch-text a {
+            color: #7c5ba6;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* ปรับขนาดสำหรับมือถือ */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+                width: 100%;
+            }
+
+            h1 {
+                font-size: 18px;
+            }
+
+            label, input, select, button {
+                font-size: 14px;
+            }
+
+            button {
+                padding: 10px;
+            }
+
+            #login-container img,
+            #register-container img {
+                width: 80%;
+                max-width: 250px; /* ปรับขนาดภาพให้เล็กลงสำหรับมือถือ */
+                height: auto;
+                margin-bottom: 10px; /* ลดระยะห่างใต้ภาพ */
+            }
+        }
+
+        /* Style for the image */
+        #login-container img,
+        #register-container img {
+            width: 70%;
+            max-width: 300px; /* ปรับขนาดภาพที่แสดงบนหน้าจอที่ใหญ่กว่า */
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .xx {
             position: absolute;
             top: 0;
             left: 0;
             margin: 10px;
         }
 
-        .logo img {
-            max-width: 300px; /* ขนาดโลโก้เล็กลง */
-            height: auto;
-        }
-
-        /* สไตล์ของ body */
-        body {
-            font-family: 'Prompt', 'Sarabun', sans-serif;
-            background: #faf8f8;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        /* สไตล์ของ container */
-        .container {
-            padding: 20px; /* ลด padding */
-            text-align: center;
-            max-width: 320px; /* ขนาดกรอบเล็กลง */
-            width: 90%;
-            margin: 20px auto;
-        }
-
-        /* สไตล์ของ h2 */
-        h2 {
-            font-weight: bold;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-            font-size: 19px; /* ลดขนาดฟอนต์ */
-            color: #7c5ba6;
-            margin-bottom: 15px;
-        }
-
-        /* สไตล์ของปุ่ม */
-        .button {
-            display: block;
-            width: 100%;
-            max-width: 250px;
-            margin: 10px auto;
-            padding: 10px 15px; /* ลดขนาด padding */
-            font-size: 16px; /* ลดขนาดฟอนต์ */
-            font-weight: bold;
-            text-align: center;
-            color: #FFFFFF;
-            background-color: #f5b62a;
-            border: none;
-            border-radius: 20px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            cursor: pointer;
-        }
-
-        .button:hover {
-            background-color: #f07325;
-        }
-
-        .button:active {
-            background-color: #f5b62a;
-            transform: translateY(2px);
-        }
-
-        /* รูปแบบของรายการ ul */
-        ul {
-            text-align: left;
-            margin: 15px 0;
-            padding-left: 10px; /* ลด padding */
-            font-size: 16px; /* ลดขนาดฟอนต์ */
-        }
-
-        ul li {
-            margin: 10px 0;
-            color: #555555;
-        }
     </style>
 </head>
 
 <body>
-    <div class="logo">
-        <img src="03.png" alt="ป้าย" style="width: 150px; height: auto;">
+
+    <div class="container" id="login-container">
+        <img src="03.png" alt="ป้าย" />
+        <h1>เข้าสู่ระบบ</h1>
+        <label for="login-phone">เบอร์โทรศัพท์</label>
+        <input type="tel" id="login-phone" placeholder="กรอกเบอร์โทรศัพท์" required>
+        <button onclick="login()">เข้าสู่ระบบ</button>
+        <p class="switch-text">ยังไม่เคยลงทะเบียน? <a href="#" onclick="showRegister()">ลงทะเบียน</a></p>
     </div>
 
-    <!-- คอนเทนเนอร์เนื้อหา -->
-    <div class="container" id="confirmation-screen">
-        <h2>คำแนะนำการใช้งาน</h2>
-        <div class="confirmation">
-            <ul>
-                <li>
-                    <strong>1. เตรียมตัว</strong><br>
-                    - ใช้ถุงใต้ตาเป็นจุดสังเกต<br>
-                    - ควรใช้แสงสว่างเพียงพอ<br>
-                    - ทำความสะอาดรอบดวงตา<br>
-                    - ตรวจสอบให้ไม่มีสิ่งใดบังถุงใต้ตา
-                </li>
-                <li>
-                    <strong>2. เมื่อเข้าสู่หน้าถ่ายรูป</strong><br>
-                    - ดึงเปลือกตาขวาลง<br>
-                    - เลื่อนตาและถุงใต้ตาให้อยู่ในวงกลม<br>
-                    - หากตาอยู่ในกรอบของกล้อง<br>
-                    - กดถ่ายรูปเมื่อมั่นใจในตำแหน่ง
-                </li>
-            </ul>
+    <div class="container" id="register-container">
+        <div class="xx">
+            <img src="03.png" alt="ป้าย" style="width: 150px; height: 70px;">
         </div>
-        <button class="button" onclick="startShooting()">เริ่มการถ่ายภาพ</button>
+        <h1>ลงทะเบียน</h1>
+        <label>ชื่อ</label>
+        <input type="text" id="name" placeholder="ชื่อ" required>
+
+        <label>นามสกุล</label>
+        <input type="text" id="surname" placeholder="นามสกุล" required>
+
+        <label>เพศ</label>
+        <select id="gender">
+            <option value="ชาย">ชาย</option>
+            <option value="หญิง">หญิง</option>
+        </select>
+
+        <label>วันเดือนปีเกิด</label>
+        <input type="date" id="dob" required>
+
+        <label>สัญชาติ</label>
+        <input type="text" id="nationality" placeholder="สัญชาติ" required>
+
+        <label>เบอร์โทรศัพท์</label>
+        <input type="tel" id="phone" placeholder="เบอร์โทรศัพท์" required>
+
+        <button onclick="register()">ลงทะเบียน</button>
+        <p class="switch-text">มีบัญชีอยู่แล้ว? <a href="#" onclick="showLogin()">เข้าสู่ระบบ</a></p>
     </div>
 
     <script>
-        function startShooting() {
-            alert("คุณกำลังเข้าสู่หน้าถ่ายภาพ...");
-            window.location.href = 'page4.html';
+        function login() {
+            const phone = document.getElementById("login-phone").value;
+            const storedPhone = localStorage.getItem("phone");
+
+            if (phone === storedPhone) {
+                alert("เข้าสู่ระบบสำเร็จ!");
+                window.location.href = "page2.html"; // เปลี่ยนเป็นหน้า 3.html
+            } else {
+                alert("ไม่พบข้อมูล กรุณาลงทะเบียนก่อน!");
+            }
         }
+
+        function register() {
+            const name = document.getElementById("name").value;
+            const surname = document.getElementById("surname").value;
+            const gender = document.getElementById("gender").value;
+            const dob = document.getElementById("dob").value;
+            const nationality = document.getElementById("nationality").value;
+            const phone = document.getElementById("phone").value;
+
+            if (!name || !surname || !dob || !nationality || !phone) {
+                alert("กรุณากรอกข้อมูลให้ครบทุกช่อง!");
+                return;
+            }
+
+            localStorage.setItem("name", name);
+            localStorage.setItem("surname", surname);
+            localStorage.setItem("gender", gender);
+            localStorage.setItem("dob", dob);
+            localStorage.setItem("nationality", nationality);
+            localStorage.setItem("phone", phone);
+
+            alert("ลงทะเบียนสำเร็จ! กรุณาเข้าสู่ระบบ");
+            showLogin();
+        }
+
+        function showRegister() {
+            document.getElementById("login-container").style.display = "none";
+            document.getElementById("register-container").style.display = "block";
+        }
+
+        function showLogin() {
+            document.getElementById("register-container").style.display = "none";
+            document.getElementById("login-container").style.display = "block";
+        }
+
+        // ตรวจสอบว่ามีข้อมูลอยู่แล้วหรือไม่
+        window.onload = function () {
+            if (localStorage.getItem("phone")) {
+                showLogin();
+            } else {
+                showRegister();
+            }
+        };
     </script>
+
 </body>
 
 </html>
