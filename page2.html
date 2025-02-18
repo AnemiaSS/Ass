@@ -3,313 +3,302 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
-         .logo {
-            position: absolute; /* จัดให้อยู่ตำแหน่งแบบ absolute */
-            top: 0; /* ชิดด้านบน */
-            left: 0; /* ชิดด้านซ้าย */
-            margin: 10px; /* เพิ่มขอบเล็กน้อย */
-        }
-        /* สไตล์ของ body */
-        body {
-            font-family: 'Arial', sans-serif;
-            background: #faf8f8;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        /* สไตล์ของ container */
-        .container {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 30px 25px;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-            margin: 20px;
-        }
-        
-        /* สไตล์ของ h1 */
-        h1 {
-            font-family: 'Prompt', 'Sarabun', sans-serif;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            font-size: 30px;
-            color: #7c5ba6;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-    
-        .back-button {
+       body {
+    font-family: 'Arial', sans-serif;
+    background: #faf8f8;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden; /* ป้องกันการเลื่อนหน้าจอ */
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 90%;
+    max-width: 500px;
+    margin: 20px;
+    box-sizing: border-box;
+    border: none; /* ลบกรอบสีขาว */
+}
+
+h1 {
+    font-family: 'Prompt', 'Sarabun', sans-serif;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    font-size: 28px;
+    color: #7c5ba6;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+h2 {
+    font-size: 24px;
+    color: #7c5ba6;
+    margin-bottom: 20px;
+}
+
+ul {
+    text-align: left;
+    margin: 20px 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+ul li {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #555555;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    font-size: 16px;
+    color: #5A3D9A;
+    margin-bottom: 5px;
+    font-weight: bold;
+    gap: 10px;
+    padding-left: 10px; /* เพิ่มระยะห่างจากขอบ */
+    padding-right: 10px; /* เพิ่มระยะห่างจากขอบ */
+}
+
+input[type="checkbox"] {
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+    accent-color: #7c5ba6;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="date"] {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border: 2px solid #7c5ba6;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    padding-left: 10px; /* เพิ่มระยะห่างจากขอบ */
+    padding-right: 10px; /* เพิ่มระยะห่างจากขอบ */
+}
+
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="date"]:focus {
+    border-color: #f5b62a;
+    box-shadow: 0 0 5px rgba(245, 130, 32, 0.7);
+    outline: none;
+}
+
+input::placeholder {
+    color: #888;
+}
+
+.button {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 10px auto;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    color: #FFFFFF;
+    background-color: #f5b62a;
+    border: none;
+    border-radius: 25px;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #f07325;
+}
+
+.button:active {
+    background-color: #f5b62a;
+    transform: translateY(3px);
+}
+
+.back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: none;
+    border: none;
+    color: #007BFF;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.back-button:hover {
+    color: #0056b3;
+}
+
+.container,
+.card {
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px #7c5ba6(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+    display: none;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.active {
+    display: block;
+    opacity: 1;
+}
+.xx {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            background: none;
-            border: none;
-            color: #007BFF;
-            font-size: 16px;
-            cursor: pointer;
-            text-decoration: underline;
+            top: 0;
+            left: 0;
+            margin: 10px;
         }
-    
-        .back-button:hover {
-            color: #0056b3;
-        }
-    
-        /* สไตล์ของปุ่ม */
-        .button {
-            display: block;
-            width: 100%;
-            max-width: 300px;
-            margin: 10px auto;
-            padding: 12px 20px;
-            font-size: 16px;
-            font-weight: bold;
-            text-align: center;
-            color: #FFFFFF;
-            background-color: #f5b62a;
-            border: none;
-            border-radius: 25px;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
-            cursor: pointer;
-        }
-    
-        .button:hover {
-            background-color: #f07325;
-        }
-    
-        .button:active {
-            background-color: #f5b62a;
-            transform: translateY(3px);
-        }
-    
-        /* สไตล์ของข้อความ label */
-        .options label {
-            display: block;
-            margin: 30px 0;
-            font-size: 20px;
-            color: #333;
-        }
-    
-        /* สำหรับการจัดการ container ที่มีการใช้งานของ card */
-        .container,
-        .card {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px #7c5ba6(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-            display: none;
-            transition: opacity 0.3s ease-in-out;
-        }
-    
-        .active {
-            display: block;
-            opacity: 1;
-        }
-    
-        /* สไตล์ของ h2 */
-        h2 {
-            font-size: 24px;
-            color: #7c5ba6;
-            margin-bottom: 20px;
-        }
-    
-        /* รูปแบบของรายการ ul */
-        ul {
-            text-align: left;
-            margin: 20px 0;
-            padding: 0;
-            list-style-type: none;
-        }
-    
-        ul li {
-            margin: 10px 0;
-            font-size: 16px;
-            color: #555555;
-        }
-    
-        label {
-            display: flex;
-            align-items: center;
-            justify-content: left;
-            font-size: 16px;
-            color: #5A3D9A;
-            margin-bottom: 5px;
-            font-weight: bold;
-            gap: 10px;
-        }
-    
-        input[type="checkbox"] {
-            width: 30px;
-            height: 30px;
-            margin-left: 10px;
-            accent-color: #7c5ba6;
-        }
-    
-        /* สไตล์ของกล่องกรอกข้อมูล */
-        input[type="text"],
-        input[type="tel"],
-        input[type="date"] {
-            width: 100%;
-            padding: 14px;
-            margin: 10px 0;
-            border: 2px solid #7c5ba6;
-            border-radius: 8px;
-            font-size: 16px;
-            box-sizing: border-box;
-            background-color: #f9f9f9;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-    
-        input[type="text"]:focus,
-        input[type="tel"]:focus,
-        input[type="date"]:focus {
-            border-color: #f5b62a;
-            box-shadow: 0 0 5px rgba(245, 130, 32, 0.7);
-            outline: none;
-        }
-    
-        input::placeholder {
-            color: #888;
-        }
+
     </style>
 </head>
 
 <body>
-     <!-- รูปภาพซ้ายบน -->
-     <div class="logo">
+    <div class="xx">
         <img src="03.png" alt="ป้าย" style="width: 150px; height: 70px;">
     </div>
+
     <!-- หน้าจอข้อกำหนด -->
-   
-<div class="container active" id="conditions-screen">
-    <h1>ข้อกำหนดในการเข้าใช้งาน</h1>
-    <ul>
-        <li> อายุ 18 ปีขึ้นไป</li>
-        <li> ไม่มีโรคตาหรือหยอดยาตาภายใน 1 เดือน</li>
-        <li>ไม่เคยเสียเลือดมากหรือได้รับเลือดใน 1 เดือนที่ผ่านมา</li>
-        <li>ไม่มีประวัติฉายแสงหรือเคมีบำบัด</li>
-    </ul>
+    <div class="container active" id="conditions-screen">
+        <h1>ข้อกำหนดในการเข้าใช้งาน</h1>
+        <ul>
+            <li> อายุ 18 ปีขึ้นไป</li>
+            <li> ไม่มีโรคตาหรือหยอดยาตาภายใน 1 เดือน</li>
+            <li>ไม่เคยเสียเลือดมากหรือได้รับเลือดใน 1 เดือนที่ผ่านมา</li>
+            <li>ไม่มีประวัติฉายแสงหรือเคมีบำบัด</li>
+        </ul>
 
-    <label> <input type="checkbox" id="conditions-check">
-        ข้าพเจ้ามีคุณสมบัติตรงตามข้อกำหนด
-    </label>
+        <label> <input type="checkbox" id="conditions-check">
+            ข้าพเจ้ามีคุณสมบัติตรงตามข้อกำหนด
+        </label>
 
-    <button class="button" onclick="proceed()">ลงทะเบียน</button>
-</div>
+        <button class="button" onclick="proceed()">ลงทะเบียน</button>
+    </div>
 
-<!-- หน้าจอลงทะเบียน -->
-<div class="container" id="register-screen">
-    <h2>ลงทะเบียน</h2>
-    <form id="register-form">
-        <label for="name">ชื่อ</label>
-        <input type="text" id="name" placeholder="กรอกชื่อ" required>
+    <!-- หน้าจอลงทะเบียน -->
+    <div class="container" id="register-screen">
+        <h2>ลงทะเบียน</h2>
+        <form id="register-form">
+            <label for="name">ชื่อ</label>
+            <input type="text" id="name" placeholder="กรอกชื่อ" required>
 
-        <label for="surname">นามสกุล</label>
-        <input type="text" id="surname" placeholder="กรอกนามสกุล" required>
-        
-        <label for="nationality">สัญชาติ</label>
-        <input type="text" id="nationality" placeholder="กรอกสัญชาติ" required>
+            <label for="surname">นามสกุล</label>
+            <input type="text" id="surname" placeholder="กรอกนามสกุล" required>
+            
+            <label for="nationality">สัญชาติ</label>
+            <input type="text" id="nationality" placeholder="กรอกสัญชาติ" required>
 
-        <label for="phone">เบอร์โทรศัพท์</label>
-        <input type="tel" id="phone" placeholder="กรอกเบอร์โทรศัพท์" required>
+            <label for="phone">เบอร์โทรศัพท์</label>
+            <input type="tel" id="phone" placeholder="กรอกเบอร์โทรศัพท์" required>
 
-        <label for="dob">วันเดือนปีเกิด</label>
-        <input type="date" id="dob" required>
+            <label for="dob">วันเดือนปีเกิด</label>
+            <input type="date" id="dob" required>
 
-        <button type="submit" class="button">ยืนยันการลงทะเบียน</button>
-    </form>
-</div>
+            <button type="submit" class="button">ยืนยันการลงทะเบียน</button>
+        </form>
+    </div>
 
-<!-- หน้าจอยืนยัน -->
-<div class="container" id="confirmation-screen">
-    <h2>ลงทะเบียนสำเร็จ</h2>
-    <p>ข้อมูลของท่านถูกบันทึกเข้าสู่ระบบเรียบร้อยแล้ว</p>
-    <p>ชื่อ: <span id="confirm-name"></span></p>
-    <p>นามสกุล: <span id="confirm-surname"></span></p>
-    <p>สัญชาติ: <span id="confirm-nationality"></span></p>
-    <p>เบอร์โทรศัพท์: <span id="confirm-phone"></span></p>
-    <p>วันเกิด: <span id="confirm-dob"></span></p>
-    <button class="button" onclick="startShooting()">เริ่มต้นใช้งาน</button>
-    <button class="button" onclick="editInformation()">แก้ไขข้อมูล</button>
-</div>
+    <!-- หน้าจอยืนยัน -->
+    <div class="container" id="confirmation-screen">
+        <h2>ลงทะเบียนสำเร็จ</h2>
+        <p>ข้อมูลของท่านถูกบันทึกเข้าสู่ระบบเรียบร้อยแล้ว</p>
+        <p>ชื่อ: <span id="confirm-name"></span></p>
+        <p>นามสกุล: <span id="confirm-surname"></span></p>
+        <p>สัญชาติ: <span id="confirm-nationality"></span></p>
+        <p>เบอร์โทรศัพท์: <span id="confirm-phone"></span></p>
+        <p>วันเกิด: <span id="confirm-dob"></span></p>
+        <button class="button" onclick="startShooting()">เริ่มต้นใช้งาน</button>
+        <button class="button" onclick="editInformation()">แก้ไขข้อมูล</button>
+    </div>
 
-<script>
-    function proceed() {
-        const checkbox = document.getElementById('conditions-check');
-        if (!checkbox.checked) {
-            alert('กรุณายอมรับเงื่อนไขก่อนดำเนินการต่อ');
-            return;
+    <script>
+        function proceed() {
+            const checkbox = document.getElementById('conditions-check');
+            if (!checkbox.checked) {
+                alert('กรุณายอมรับเงื่อนไขก่อนดำเนินการต่อ');
+                return;
+            }
+            switchScreen('conditions-screen', 'register-screen');
         }
-        switchScreen('conditions-screen', 'register-screen');
-    }
 
-    document.getElementById('register-form').addEventListener('submit', function (e) {
-        e.preventDefault();
+        document.getElementById('register-form').addEventListener('submit', function (e) {
+            e.preventDefault();
 
-        // ดึงข้อมูลจากฟอร์ม
-        const name = document.getElementById('name').value;
-        const surname = document.getElementById('surname').value;
-        const nationality = document.getElementById('nationality').value;
-        const phone = document.getElementById('phone').value;
-        const dob = document.getElementById('dob').value;
+            // ดึงข้อมูลจากฟอร์ม
+            const name = document.getElementById('name').value;
+            const surname = document.getElementById('surname').value;
+            const nationality = document.getElementById('nationality').value;
+            const phone = document.getElementById('phone').value;
+            const dob = document.getElementById('dob').value;
 
-        // แสดงข้อมูลในหน้าจอยืนยัน
-        document.getElementById('confirm-name').textContent = name;
-        document.getElementById('confirm-surname').textContent = surname;
-        document.getElementById('confirm-nationality').textContent = nationality;
-        document.getElementById('confirm-phone').textContent = phone;
-        document.getElementById('confirm-dob').textContent = dob;
+            // แสดงข้อมูลในหน้าจอยืนยัน
+            document.getElementById('confirm-name').textContent = name;
+            document.getElementById('confirm-surname').textContent = surname;
+            document.getElementById('confirm-nationality').textContent = nationality;
+            document.getElementById('confirm-phone').textContent = phone;
+            document.getElementById('confirm-dob').textContent = dob;
 
-        // เปลี่ยนหน้าจอ
-        switchScreen('register-screen', 'confirmation-screen');
-    });
+            // เปลี่ยนหน้าจอ
+            switchScreen('register-screen', 'confirmation-screen');
+        });
 
-    function switchScreen(hideId, showId) {
-        document.getElementById(hideId).classList.remove('active');
-        document.getElementById(hideId).style.display = 'none';
-        document.getElementById(showId).classList.add('active');
-        document.getElementById(showId).style.display = 'block';
-    }
+        function switchScreen(hideId, showId) {
+            document.getElementById(hideId).classList.remove('active');
+            document.getElementById(hideId).style.display = 'none';
+            document.getElementById(showId).classList.add('active');
+            document.getElementById(showId).style.display = 'block';
+        }
 
-    function startShooting() {
-        window.location.href = 'page2-1.html';
-    }
+        function startShooting() {
+            window.location.href = 'page2-1.html';
+        }
 
-    function editInformation() {
-        // ดึงข้อมูลจากหน้าจอยืนยันมาแสดงในฟอร์ม
-        const name = document.getElementById('confirm-name').textContent;
-        const surname = document.getElementById('confirm-surname').textContent;
-        const nationality = document.getElementById('confirm-nationality').textContent;
-        const phone = document.getElementById('confirm-phone').textContent;
-        const dob = document.getElementById('confirm-dob').textContent;
+        function editInformation() {
+            // ดึงข้อมูลจากหน้าจอยืนยันมาแสดงในฟอร์ม
+            const name = document.getElementById('confirm-name').textContent;
+            const surname = document.getElementById('confirm-surname').textContent;
+            const nationality = document.getElementById('confirm-nationality').textContent;
+            const phone = document.getElementById('confirm-phone').textContent;
+            const dob = document.getElementById('confirm-dob').textContent;
 
-        // แสดงข้อมูลในฟอร์มเพื่อให้สามารถแก้ไขได้
-        document.getElementById('name').value = name;
-        document.getElementById('surname').value = surname;
-        document.getElementById('nationality').value = nationality;
-        document.getElementById('phone').value = phone;
-        document.getElementById('dob').value = dob;
+            // แสดงข้อมูลในฟอร์มเพื่อให้สามารถแก้ไขได้
+            document.getElementById('name').value = name;
+            document.getElementById('surname').value = surname;
+            document.getElementById('nationality').value = nationality;
+            document.getElementById('phone').value = phone;
+            document.getElementById('dob').value = dob;
 
-        // เปลี่ยนกลับไปที่หน้าจอลงทะเบียน
-        switchScreen('confirmation-screen', 'register-screen');
-    }
-
-    function startShooting() {
-        window.location.href = 'page2-1.html';
-    }
-</script>
-
+            // เปลี่ยนหน้าจอไปยังหน้าลงทะเบียน
+            switchScreen('confirmation-screen', 'register-screen');
+        }
+    </script>
 </body>
 
 </html>
