@@ -164,9 +164,25 @@
     <script>
         document.getElementById('register-form').addEventListener('submit', function (e) {
             e.preventDefault();
+            const name = document.getElementById('name').value;
+            const lastname = document.getElementById('lastname').value;
+            const phone = document.getElementById('phone').value;
+            
+            localStorage.setItem('name', name);
+            localStorage.setItem('lastname', lastname);
+            localStorage.setItem('phone', phone);
+
             document.getElementById('registration-screen').style.display = 'none';
             document.getElementById('confirmation-screen').style.display = 'block';
         });
+
+        window.onload = function () {
+            const storedPhone = localStorage.getItem('phone');
+            if (storedPhone) {
+                document.getElementById('registration-screen').style.display = 'none';
+                document.getElementById('confirmation-screen').style.display = 'block';
+            }
+        };
 
         function startShooting() {
             window.location.href = 'page4.html';
