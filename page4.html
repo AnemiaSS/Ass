@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Eye Detection with Camera Controls</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
@@ -21,11 +21,26 @@
             flex-direction: column;
         }
 
+        .button-back-top-right {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .button-back-top-right img {
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .button-back-top-right img:hover {
+            transform: scale(1.1);
+        }
+
         .container {
-            background-color: rgba(255, 255, 255, 0.9);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             width: 100%;
             max-width: 720px;
             display: flex;
@@ -34,31 +49,39 @@
             align-items: center;
         }
 
+        h1 {
+            font-size: 24px;
+            color: #7c5ba6;
+            margin-bottom: 15px;
+        }
+
         .main-canvas {
             border-radius: 10px;
             max-width: 100%;
             max-height: 400px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             margin: 15px 0;
         }
 
-        .camera-controls {
+        .controls {
             display: flex;
             gap: 10px;
-            margin-bottom: 15px;
+            margin: 10px 0;
         }
 
-        .camera-btn {
+        .btn-action {
             background-color: #f5b62a;
             color: white;
-            padding: 8px 15px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        .camera-btn:hover {
+        .btn-action:hover {
             background-color: #f07325;
         }
 
@@ -68,102 +91,119 @@
             left: 0;
             margin: 10px;
         }
-        h1 {
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            font-size: 24px;
-            color: #5A3D9A;
-            margin-bottom: 20px;
-        }
     </style>
 </head>
 
 <body>
     <a class="xx">
-        <img src="03.png" alt="ป้าย" style="width: 150px; height: 70px;">
+        <img src="03.png" alt="ป้าย" style="width: 150px; height: auto;">
     </a>
+
+    <a href="page4.html" class="button-back-top-right">
+        <img src="2.png" alt="ย้อนกลับ" style="width: 50px; height: auto;">
+    </a>
+
     <div class="container">
         <h1>ถ่ายภาพเพื่อวิเคราะห์</h1>
-        <div class="camera-controls">
-            <button id="flipCamera" class="camera-btn">สลับกล้อง</button>
+        <div class="controls">
+            <button id="flipCamera" class="btn-action">สลับกล้อง</button>
         </div>
-        <video id="video" autoplay playsinline></video>
+        <video id="video" autoplay muted style="display:none;"></video>
         <canvas id="outputCanvas" class="main-canvas"></canvas>
-        <button id="captureButton" class="camera-btn">📸 ถ่ายภาพ</button>
+        <button id="captureButton" class="btn-action">
+            <img src="04.png" alt="ถ่ายภาพ" style="width: 40px; height: auto;">
+        </button>
     </div>
 
     <script>
-        let currentCamera = 'user';
-        let faceMesh;
-        let camera;
         const videoElement = document.getElementById('video');
         const canvasElement = document.getElementById('outputCanvas');
         const canvasCtx = canvasElement.getContext('2d');
+        let faceMesh;
         let currentLandmarks = null;
+        let currentCamera = 'user';
+        let camera;
 
-        async function startCamera() {
-            try {
-                if (videoElement.srcObject) {
-                    videoElement.srcObject.getTracks().forEach(track => track.stop());
-                }
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: currentCamera }
-                });
-                videoElement.srcObject = stream;
-                await videoElement.play();
+        async function initializeFaceMesh() {
+            faceMesh = new FaceMesh({
+                locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`,
+            });
 
-                if (!faceMesh) {
-                    faceMesh = new FaceMesh({
-                        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`,
-                    });
-                    faceMesh.setOptions({
-                        maxNumFaces: 1,
-                        refineLandmarks: true,
-                        minDetectionConfidence: 0.5,
-                        minTrackingConfidence: 0.5,
-                    });
-                    faceMesh.onResults(onResults);
-                }
+            faceMesh.setOptions({
+                maxNumFaces: 1,
+                refineLandmarks: true,
+                minDetectionConfidence: 0.5,
+                minTrackingConfidence: 0.5,
+            });
 
-                if (camera) {
-                    camera.stop();
-                }
-                camera = new Camera(videoElement, {
-                    onFrame: async () => {
-                        await faceMesh.send({ image: videoElement });
-                    },
-                    width: 640,
-                    height: 480,
-                });
-                camera.start();
-            } catch (err) {
-                console.error('Error starting camera:', err);
-                alert('ไม่สามารถเปิดกล้องได้ กรุณาตรวจสอบการอนุญาตการใช้กล้อง');
-            }
+            faceMesh.onResults(onResults);
         }
 
-        function switchCamera() {
-            currentCamera = currentCamera === 'user' ? 'environment' : 'user';
-            startCamera();
+        async function startCamera() {
+            if (camera) {
+                await camera.stop();
+            }
+
+            camera = new Camera(videoElement, {
+                onFrame: async () => {
+                    await faceMesh.send({ image: videoElement });
+                },
+                width: 640,
+                height: 480,
+                facingMode: currentCamera,
+            });
+
+            try {
+                await camera.start();
+            } catch (error) {
+                console.error('Error starting camera:', error);
+                alert('ไม่สามารถเปิดกล้องได้ กรุณาตรวจสอบการอนุญาตการใช้กล้อง');
+            }
         }
 
         function onResults(results) {
             canvasElement.width = videoElement.videoWidth;
             canvasElement.height = videoElement.videoHeight;
+
             canvasCtx.save();
             canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+            // Flip canvas horizontally for mirror effect
+            canvasCtx.translate(canvasElement.width, 0);
+            canvasCtx.scale(-1, 1);
+
             canvasCtx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+
+            if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
+                currentLandmarks = results.multiFaceLandmarks[0];
+            }
+
             canvasCtx.restore();
         }
 
-        document.getElementById('flipCamera').addEventListener('click', switchCamera);
-        document.getElementById('captureButton').addEventListener('click', () => {
-            const dataUrl = canvasElement.toDataURL('image/png');
-            localStorage.setItem('capturedImage', dataUrl);
-            window.location.href = "page5.html";
+        document.getElementById('flipCamera').addEventListener('click', () => {
+            currentCamera = currentCamera === 'user' ? 'environment' : 'user';
+            startCamera();
         });
-        
-        startCamera();
+
+        document.getElementById('captureButton').addEventListener('click', () => {
+            if (currentLandmarks) {
+                const imageData = canvasElement.toDataURL('image/png');
+                localStorage.setItem('capturedImage', imageData);
+                window.location.href = 'page5.html';
+            } else {
+                alert('ไม่พบตำแหน่งดวงตา! กรุณาลองใหม่อีกครั้ง.');
+            }
+        });
+
+        async function initialize() {
+            await initializeFaceMesh();
+            await startCamera();
+        }
+
+        initialize();
     </script>
 </body>
+
 </html>
+
