@@ -109,8 +109,15 @@
             }
 
             .main-canvas {
-                max-height: 200px;
+                border-radius: 10px;
+                max-width: 80%;
+                /* ลดขนาดความกว้างของ canvas */
+                max-height: 300px;
+                /* ลดความสูงลง */
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                margin: 15px 0;
             }
+
 
             .camera-btn {
                 padding: 5px 10px;
@@ -218,54 +225,69 @@
 
         // ฟังก์ชันถ่ายภาพและบันทึก
         document.getElementById('captureButton').addEventListener('click', () => {
-            if (!currentLandmarks) return;
+    if (!currentLandmarks) return;
 
-            const leftEyeIndices = [33, 160, 158, 133, 153, 144];
-            const rightEyeIndices = [362, 385, 387, 263, 373, 380];
-            const scaleFactor = 2.5;
+    const leftEyeIndices = [33, 160, 158, 133, 153, 144];
+    const rightEyeIndices = [362, 385, 387, 263, 373, 380];
+    const scaleFactor = 1.5; // ปรับขนาดให้พอดีกับดวงตา
 
-            function captureEyeRegion(landmarks, indices, scaleFactor) {
-                const xCoords = indices.map((idx) => landmarks[idx].x * canvasElement.width);
-                const yCoords = indices.map((idx) => landmarks[idx].y * canvasElement.height);
+    function captureEyeRegion(landmarks, indices, scaleFactor) {
+        const xCoords = indices.map((idx) => landmarks[idx].x * canvasElement.width);
+        const yCoords = indices.map((idx) => landmarks[idx].y * canvasElement.height);
 
-                const xMin = Math.min(...xCoords);
-                const xMax = Math.max(...xCoords);
-                const yMin = Math.min(...yCoords);
-                const yMax = Math.max(...yCoords);
+        const xMin = Math.min(...xCoords);
+        const xMax = Math.max(...xCoords);
+        const yMin = Math.min(...yCoords);
+        const yMax = Math.max(...yCoords);
 
-                const width = xMax - xMin;
-                const height = yMax - yMin;
-                const size = Math.max(width, height) * scaleFactor;
+        const width = xMax - xMin;
+        const height = yMax - yMin;
+        const size = Math.max(width, height) * scaleFactor;
 
-                const centerX = (xMin + xMax) / 2;
-                const centerY = (yMin + yMax) / 2;
+        const centerX = (xMin + xMax) / 2;
+        const centerY = (yMin + yMax) / 2;
 
-                return { x: centerX - size / 2, y: centerY - size / 2, size: size };
-            }
+        return { 
+            x: centerX - size / 2, 
+            y: centerY,  // เริ่มที่กึ่งกลางของดวงตา
+            width: size, 
+            height: size / 2 // ตัดเหลือแค่ครึ่งล่าง
+        };
+    }
 
-            const leftRegion = captureEyeRegion(currentLandmarks, leftEyeIndices, scaleFactor);
-            const rightRegion = captureEyeRegion(currentLandmarks, rightEyeIndices, scaleFactor);
+    const leftRegion = captureEyeRegion(currentLandmarks, leftEyeIndices, scaleFactor);
+    const rightRegion = captureEyeRegion(currentLandmarks, rightEyeIndices, scaleFactor);
 
-            function storeCapturedImages(leftRegion, rightRegion) {
-                const leftCanvas = document.createElement('canvas');
-                const rightCanvas = document.createElement('canvas');
-                leftCanvas.width = rightCanvas.width = leftRegion.size;
-                leftCanvas.height = rightCanvas.height = rightRegion.size;
+    function storeCapturedImages(leftRegion, rightRegion) {
+        const leftCanvas = document.createElement('canvas');
+        const rightCanvas = document.createElement('canvas');
+        leftCanvas.width = rightCanvas.width = leftRegion.width;
+        leftCanvas.height = rightCanvas.height = leftRegion.height;
 
-                const leftCtx = leftCanvas.getContext('2d');
-                const rightCtx = rightCanvas.getContext('2d');
+        const leftCtx = leftCanvas.getContext('2d');
+        const rightCtx = rightCanvas.getContext('2d');
 
-                leftCtx.drawImage(canvasElement, leftRegion.x, leftRegion.y, leftRegion.size, leftRegion.size, 0, 0, leftRegion.size, leftRegion.size);
-                rightCtx.drawImage(canvasElement, rightRegion.x, rightRegion.y, rightRegion.size, rightRegion.size, 0, 0, rightRegion.size, rightRegion.size);
+        leftCtx.drawImage(
+            canvasElement,
+            leftRegion.x, leftRegion.y, leftRegion.width, leftRegion.height,
+            0, 0, leftRegion.width, leftRegion.height
+        );
 
-                localStorage.setItem('leftEyeImage', leftCanvas.toDataURL('image/png'));
-                localStorage.setItem('rightEyeImage', rightCanvas.toDataURL('image/png'));
+        rightCtx.drawImage(
+            canvasElement,
+            rightRegion.x, rightRegion.y, rightRegion.width, rightRegion.height,
+            0, 0, rightRegion.width, rightRegion.height
+        );
 
-                window.location.href = "page4.html";
-            }
+        localStorage.setItem('leftEyeImage', leftCanvas.toDataURL('image/png'));
+        localStorage.setItem('rightEyeImage', rightCanvas.toDataURL('image/png'));
 
-            storeCapturedImages(leftRegion, rightRegion);
-        });
+        window.location.href = "page4.html";
+    }
+
+    storeCapturedImages(leftRegion, rightRegion);
+});
+
 
         startCamera();
     </script>
