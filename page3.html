@@ -229,7 +229,7 @@
 
     const leftEyeIndices = [33, 160, 158, 133, 153, 144];
     const rightEyeIndices = [362, 385, 387, 263, 373, 380];
-    const scaleFactor = 1.5; // ปรับขนาดให้พอดีกับดวงตา
+    const scaleFactor = 1.1; // ปรับขนาดให้พอดีกับดวงตา
 
     function captureEyeRegion(landmarks, indices, scaleFactor) {
         const xCoords = indices.map((idx) => landmarks[idx].x * canvasElement.width);
