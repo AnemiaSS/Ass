@@ -85,7 +85,7 @@
 
         // ✅ โหลดโมเดล TensorFlow.js
         async function loadModel() {
-            model = await tf.loadLayersModel("model.json");  // โหลดโมเดลจากไฟล์ model.json
+            model = await tf.loadLayersModel("Model004/model.json");  // โหลดโมเดลจากไฟล์ model.json
             document.querySelector(".loading").innerText = "โมเดลโหลดสำเร็จ! กำลังประมวลผล...";
             classifyImage();
         }
